@@ -26,6 +26,23 @@ Create a local `.env.local` from `.env.example` and set:
 - `CONTENTFUL_ACCESS_TOKEN`
 - `CONTENTFUL_PREVIEW_ACCESS_TOKEN` (optional, for preview mode)
 - `CONTENTFUL_REVALIDATE_SECONDS` (defaults to `300`; use `false` to disable revalidation)
+- `CONTENTFUL_REVALIDATE_SECRET` (shared secret for the Contentful webhook)
+
+## Contentful Revalidation Webhook
+
+For on-demand revalidation on Netlify, create a Contentful webhook that sends a `POST` request to:
+
+```text
+https://<your-netlify-site>/api/revalidate/contentful
+```
+
+Set `CONTENTFUL_REVALIDATE_SECRET` in Netlify and send the same value from Contentful with one of:
+
+- `Authorization: Bearer <secret>`
+- `x-contentful-webhook-secret: <secret>`
+- `?secret=<secret>` on the webhook URL
+
+The route immediately expires the shared `contentful` cache tag used by Contentful GraphQL fetches, so the next request reads fresh content.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
