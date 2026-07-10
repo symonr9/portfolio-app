@@ -1,65 +1,88 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div>
+      <section className="border-b border-foreground/10 bg-[linear-gradient(135deg,var(--surface),var(--background)_44%,var(--surface-warm))]">
+        <div className="mx-auto grid min-h-[calc(100vh-73px)] w-full max-w-6xl items-center gap-12 px-5 py-16 sm:min-h-[680px] lg:grid-cols-[1.08fr_0.92fr] lg:px-8">
+          <div className="max-w-3xl">
+            <p className="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+              Editable personal portfolio
+            </p>
+            <h1 className="text-5xl font-semibold leading-[1.02] text-foreground sm:text-6xl lg:text-7xl">
+              A flexible home for work, writing, experience, and contact.
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-muted">
+              This foundation is ready for Contentful-backed content while
+              keeping the interface calm, adaptable, and independent of any
+              single career path or audience.
+            </p>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/work"
+                className="inline-flex h-12 items-center justify-center rounded-sm bg-foreground px-5 text-sm font-semibold text-background transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                View work
+              </Link>
+              <Link
+                href="/about"
+                className="inline-flex h-12 items-center justify-center rounded-sm border border-foreground/15 px-5 text-sm font-semibold transition-colors hover:bg-foreground/6 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                Learn more
+              </Link>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            {["Profile", "Work samples", "Writing", "Experience"].map(
+              (label, index) => (
+                <div
+                  className="rounded-sm border border-foreground/10 bg-background/72 p-5 shadow-[0_18px_60px_rgba(31,41,55,0.08)] backdrop-blur"
+                  key={label}
+                >
+                  <div className="mb-6 flex items-center justify-between">
+                    <span className="text-sm font-semibold">{label}</span>
+                    <span className="font-mono text-xs text-muted">
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <div className="h-2 w-full rounded-full bg-foreground/8">
+                    <div
+                      className="h-2 rounded-full bg-accent"
+                      style={{ width: `${70 - index * 10}%` }}
+                    />
+                  </div>
+                </div>
+              ),
+            )}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </section>
+
+      <section className="mx-auto grid w-full max-w-6xl gap-6 px-5 py-16 md:grid-cols-3 lg:px-8">
+        {[
+          {
+            title: "Structured content",
+            body: "Profile details, work samples, writing, expertise tags, and experience can map cleanly to CMS entries.",
+          },
+          {
+            title: "Reusable routes",
+            body: "The starter navigation covers the core portfolio surfaces without assuming a specific profession or service model.",
+          },
+          {
+            title: "Quiet visual system",
+            body: "Neutral typography, restrained contrast, and a few warm accents establish direction without crowding future content.",
+          },
+        ].map((item) => (
+          <article
+            className="rounded-sm border border-foreground/10 bg-surface p-6"
+            key={item.title}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <h2 className="text-lg font-semibold">{item.title}</h2>
+            <p className="mt-3 leading-7 text-muted">{item.body}</p>
+          </article>
+        ))}
+      </section>
     </div>
   );
 }
