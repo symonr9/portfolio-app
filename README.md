@@ -16,6 +16,17 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Contentful Configuration
+
+This app reads portfolio content from Contentful GraphQL in server components.
+Create a local `.env.local` from `.env.example` and set:
+
+- `CONTENTFUL_SPACE_ID`
+- `CONTENTFUL_ENVIRONMENT` (defaults to `master`)
+- `CONTENTFUL_ACCESS_TOKEN`
+- `CONTENTFUL_PREVIEW_ACCESS_TOKEN` (optional, for preview mode)
+- `CONTENTFUL_REVALIDATE_SECONDS` (defaults to `300`; use `false` to disable revalidation)
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
