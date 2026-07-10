@@ -316,6 +316,26 @@ const HOME_QUERY = `
   }
 `;
 
+const PROFILE_QUERY = `
+  query PortfolioProfile($preview: Boolean!) {
+    profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
+      items {
+        name
+        headline
+        shortBio
+        longBio {
+          ${RICH_TEXT_FIELDS}
+        }
+        portrait {
+          ${ASSET_FIELDS}
+        }
+        email
+        location
+      }
+    }
+  }
+`;
+
 const WORK_SAMPLES_QUERY = `
   query WorkSamples($preview: Boolean!) {
     workSampleCollection(limit: 100, order: [sortOrder_ASC, publishDate_DESC], preview: $preview) {
@@ -483,6 +503,14 @@ export async function getHomePageData(options?: ContentfulRequestOptions) {
     featuredPosts: mapBlogPosts(data.blogPostCollection?.items),
     expertiseTags: mapTags(data.expertiseTagCollection?.items),
   };
+}
+
+export async function getProfile(options?: ContentfulRequestOptions) {
+  const data = await contentfulGraphQLFetch<{
+    profileCollection?: { items?: ProfileItem[] | null } | null;
+  }>(PROFILE_QUERY, {}, options);
+
+  return firstProfile(data.profileCollection?.items);
 }
 
 export async function getWorkSamples(options?: ContentfulRequestOptions) {

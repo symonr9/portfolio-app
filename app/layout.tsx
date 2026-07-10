@@ -6,6 +6,7 @@ import {
   getSiteUrl,
   siteName,
 } from "@/lib/site";
+import { getContentfulDraftOptions, getProfile } from "@/lib/contentful";
 import { SiteShell } from "./_components/site-shell";
 import "./globals.css";
 
@@ -44,18 +45,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const contentfulOptions = await getContentfulDraftOptions();
+  const profile = await getProfile(contentfulOptions);
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full bg-background text-foreground">
-        <SiteShell>{children}</SiteShell>
+        <SiteShell profile={profile}>{children}</SiteShell>
       </body>
     </html>
   );

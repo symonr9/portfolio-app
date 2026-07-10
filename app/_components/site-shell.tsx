@@ -1,8 +1,14 @@
 import Link from "next/link";
+import type { Profile } from "@/lib/contentful";
 import { DraftPreviewBanner } from "./draft-preview-banner";
 import { NavLinks } from "./nav-links";
 
-export function SiteShell({ children }: Readonly<{ children: React.ReactNode }>) {
+export function SiteShell({
+  children,
+  profile,
+}: Readonly<{ children: React.ReactNode; profile: Pick<Profile, "headline" | "name"> }>) {
+  const profileInitial = profile.name.trim().charAt(0).toUpperCase();
+
   return (
     <div className="flex min-h-screen flex-col">
       <a
@@ -13,18 +19,18 @@ export function SiteShell({ children }: Readonly<{ children: React.ReactNode }>)
       </a>
       <DraftPreviewBanner />
       <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/88 backdrop-blur-xl">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-2.5 lg:px-8">
           <Link
             href="/"
-            className="group inline-flex w-fit items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            className="group inline-flex min-w-0 max-w-full items-center gap-2.5 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:max-w-[44%] lg:max-w-[46%]"
             aria-label="Portfolio home"
           >
-            <span className="grid size-10 place-items-center rounded-sm border border-foreground/15 bg-foreground text-sm font-semibold text-background shadow-sm transition-transform group-hover:-translate-y-0.5">
-              P
+            <span className="grid size-8 shrink-0 place-items-center rounded-sm border border-foreground/15 bg-foreground text-xs font-semibold text-background shadow-sm transition-transform group-hover:-translate-y-0.5">
+              {profileInitial}
             </span>
-            <span className="flex flex-col leading-none">
-              <span className="text-sm font-semibold">Portfolio</span>
-              <span className="mt-1 text-xs text-muted">Personal site system</span>
+            <span className="flex min-w-0 flex-col leading-tight">
+              <span className="truncate text-sm font-semibold">{profile.name}</span>
+              <span className="truncate text-xs text-muted">{profile.headline}</span>
             </span>
           </Link>
 
