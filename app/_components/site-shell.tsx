@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { DraftPreviewBanner } from "./draft-preview-banner";
 
 const navigationItems = [
   { href: "/", label: "Home" },
@@ -12,6 +13,7 @@ const navigationItems = [
 export function SiteShell({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="flex min-h-screen flex-col">
+      <DraftPreviewBanner />
       <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/88 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <Link

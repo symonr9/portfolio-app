@@ -1,9 +1,20 @@
-import { getAboutPageData } from "@/lib/contentful";
+import type { Metadata } from "next";
+import { getAboutPageData, getContentfulDraftOptions } from "@/lib/contentful";
+import { buildPageMetadata } from "@/lib/site";
 import { ContentfulImage } from "../_components/contentful-image";
 import { RichTextRenderer } from "../_components/rich-text-renderer";
 
+export const metadata: Metadata = buildPageMetadata({
+  title: "About",
+  description:
+    "Learn more about the portfolio owner, their background, and recent experience.",
+  path: "/about",
+  type: "profile",
+});
+
 export default async function AboutPage() {
-  const { experiences, profile } = await getAboutPageData();
+  const contentfulOptions = await getContentfulDraftOptions();
+  const { experiences, profile } = await getAboutPageData(contentfulOptions);
 
   return (
     <div>

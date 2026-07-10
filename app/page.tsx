@@ -1,10 +1,11 @@
 import Link from "next/link";
-import { getHomePageData } from "@/lib/contentful";
+import { getContentfulDraftOptions, getHomePageData } from "@/lib/contentful";
 import { ContentfulImage, MediaPlaceholder } from "./_components/contentful-image";
 
 export default async function Home() {
+  const contentfulOptions = await getContentfulDraftOptions();
   const { expertiseTags, featuredPosts, featuredWork, profile } =
-    await getHomePageData();
+    await getHomePageData(contentfulOptions);
 
   return (
     <div>

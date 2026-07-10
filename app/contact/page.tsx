@@ -1,7 +1,17 @@
-import { getContactPageData } from "@/lib/contentful";
+import type { Metadata } from "next";
+import { getContactPageData, getContentfulDraftOptions } from "@/lib/contentful";
+import { buildPageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Contact",
+  description:
+    "Find the best way to reach the portfolio owner for inquiries, collaboration, or conversation.",
+  path: "/contact",
+});
 
 export default async function ContactPage() {
-  const { contactCta, profile } = await getContactPageData();
+  const contentfulOptions = await getContentfulDraftOptions();
+  const { contactCta, profile } = await getContactPageData(contentfulOptions);
 
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">

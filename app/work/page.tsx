@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { getWorkSamples } from "@/lib/contentful";
+import { getContentfulDraftOptions, getWorkSamples } from "@/lib/contentful";
+import { buildPageMetadata } from "@/lib/site";
 import { ContentfulImage, MediaPlaceholder } from "../_components/contentful-image";
 import { TagFilterNav } from "../_components/tag-filter-nav";
 import type { Tag } from "@/lib/contentful";
@@ -8,9 +10,17 @@ type WorkPageProps = {
   searchParams: Promise<{ tag?: string | string[] }>;
 };
 
+export const metadata: Metadata = buildPageMetadata({
+  title: "Work",
+  description:
+    "Explore selected work samples with context, process, outcomes, and supporting media.",
+  path: "/work",
+});
+
 export default async function WorkPage({ searchParams }: WorkPageProps) {
   const selectedTag = getSelectedTag((await searchParams).tag);
-  const workSamples = await getWorkSamples();
+  const contentfulOptions = await getContentfulDraftOptions();
+  const workSamples = await getWorkSamples(contentfulOptions);
   const tags = getUniqueTags(workSamples.flatMap((sample) => sample.tags));
   const filteredSamples = selectedTag
     ? workSamples.filter((sample) =>

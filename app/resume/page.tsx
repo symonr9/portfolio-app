@@ -1,7 +1,18 @@
-import { getResumePageData } from "@/lib/contentful";
+import type { Metadata } from "next";
+import { getContentfulDraftOptions, getResumePageData } from "@/lib/contentful";
+import { buildPageMetadata } from "@/lib/site";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Resume",
+  description:
+    "Review experience, capabilities, highlights, and contact details from the portfolio.",
+  path: "/resume",
+});
 
 export default async function ResumePage() {
-  const { experiences, expertiseTags, profile } = await getResumePageData();
+  const contentfulOptions = await getContentfulDraftOptions();
+  const { experiences, expertiseTags, profile } =
+    await getResumePageData(contentfulOptions);
 
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">

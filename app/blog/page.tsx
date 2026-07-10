@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-import { getBlogPosts } from "@/lib/contentful";
+import { getBlogPosts, getContentfulDraftOptions } from "@/lib/contentful";
+import { buildPageMetadata } from "@/lib/site";
 import { ContentfulImage } from "../_components/contentful-image";
 import { TagFilterNav } from "../_components/tag-filter-nav";
 import type { BlogPost, Tag } from "@/lib/contentful";
@@ -8,9 +10,17 @@ type BlogPageProps = {
   searchParams: Promise<{ tag?: string | string[] }>;
 };
 
+export const metadata: Metadata = buildPageMetadata({
+  title: "Blog",
+  description:
+    "Browse notes, essays, resources, and updates published through the portfolio.",
+  path: "/blog",
+});
+
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const selectedTag = getSelectedTag((await searchParams).tag);
-  const blogPosts = await getBlogPosts();
+  const contentfulOptions = await getContentfulDraftOptions();
+  const blogPosts = await getBlogPosts(contentfulOptions);
   const tags = getUniqueTags(blogPosts.flatMap((post) => post.tags));
   const filteredPosts = selectedTag
     ? blogPosts.filter((post) =>

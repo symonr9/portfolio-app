@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import {
   getBlogPostBySlug,
   getBlogPostSlugParams,
+  getContentfulDraftOptions,
 } from "@/lib/contentful";
+import { buildPageMetadata } from "@/lib/site";
 import { ContentfulImage } from "../../_components/contentful-image";
 import { RichTextRenderer } from "../../_components/rich-text-renderer";
 
@@ -12,7 +14,7 @@ type BlogDetailProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   return getBlogPostSlugParams();
@@ -22,21 +24,26 @@ export async function generateMetadata({
   params,
 }: BlogDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const contentfulOptions = await getContentfulDraftOptions();
+  const post = await getBlogPostBySlug(slug, contentfulOptions);
 
   if (!post) {
     return {};
   }
 
-  return {
+  return buildPageMetadata({
     title: post.title,
     description: post.excerpt,
-  };
+    image: post.coverImage?.url,
+    path: `/blog/${post.slug}`,
+    type: "article",
+  });
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailProps) {
   const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
+  const contentfulOptions = await getContentfulDraftOptions();
+  const post = await getBlogPostBySlug(slug, contentfulOptions);
 
   if (!post) {
     notFound();

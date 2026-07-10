@@ -1,4 +1,14 @@
+import type { Metadata } from "next";
+import { buildPageMetadata } from "@/lib/site";
+
 const posts = ["Long-form note", "Field reflection", "Resource roundup"];
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "Writing",
+  description:
+    "Browse long-form entries, notes, updates, and resources from the portfolio.",
+  path: "/writing",
+});
 
 export default function WritingPage() {
   return (

@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
+  getContentfulDraftOptions,
   getWorkSampleBySlug,
   getWorkSampleSlugParams,
 } from "@/lib/contentful";
+import { buildPageMetadata } from "@/lib/site";
 import { ContentfulImage, MediaPlaceholder } from "../../_components/contentful-image";
 import { MediaEmbed } from "../../_components/media-embed";
 import { RichTextRenderer } from "../../_components/rich-text-renderer";
@@ -13,7 +15,7 @@ type WorkDetailProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   return getWorkSampleSlugParams();
@@ -23,21 +25,26 @@ export async function generateMetadata({
   params,
 }: WorkDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const sample = await getWorkSampleBySlug(slug);
+  const contentfulOptions = await getContentfulDraftOptions();
+  const sample = await getWorkSampleBySlug(slug, contentfulOptions);
 
   if (!sample) {
     return {};
   }
 
-  return {
+  return buildPageMetadata({
     title: sample.title,
     description: sample.summary,
-  };
+    image: sample.featuredImage?.url,
+    path: `/work/${sample.slug}`,
+    type: "article",
+  });
 }
 
 export default async function WorkDetailPage({ params }: WorkDetailProps) {
   const { slug } = await params;
-  const sample = await getWorkSampleBySlug(slug);
+  const contentfulOptions = await getContentfulDraftOptions();
+  const sample = await getWorkSampleBySlug(slug, contentfulOptions);
 
   if (!sample) {
     notFound();

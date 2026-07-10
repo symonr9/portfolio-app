@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import {
+  defaultDescription,
+  defaultTitle,
+  getSiteUrl,
+  siteName,
+} from "@/lib/site";
 import { SiteShell } from "./_components/site-shell";
 import "./globals.css";
 
@@ -14,12 +20,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: getSiteUrl(),
   title: {
-    default: "Portfolio",
-    template: "%s | Portfolio",
+    default: defaultTitle,
+    template: `%s | ${siteName}`,
   },
-  description:
-    "A flexible personal portfolio for profile details, work samples, writing, experience, and ways to connect.",
+  description: defaultDescription,
+  applicationName: siteName,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: defaultTitle,
+    description: defaultDescription,
+    siteName,
+    type: "website",
+    url: "/",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: defaultDescription,
+  },
 };
 
 export default function RootLayout({
