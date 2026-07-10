@@ -274,7 +274,7 @@ const BLOG_CARD_FIELDS = `
 
 const HOME_QUERY = `
   query PortfolioHome($preview: Boolean!) {
-    profileCollection(limit: 1, order: sys_updatedAt_DESC, preview: $preview) {
+    profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
         name
         headline
@@ -361,7 +361,7 @@ const BLOG_POST_QUERY = `
 
 const ABOUT_QUERY = `
   query PortfolioAbout($preview: Boolean!) {
-    profileCollection(limit: 1, order: sys_updatedAt_DESC, preview: $preview) {
+    profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
         name
         headline
@@ -399,7 +399,7 @@ const ABOUT_QUERY = `
 
 const RESUME_QUERY = `
   query PortfolioResume($preview: Boolean!) {
-    profileCollection(limit: 1, order: sys_updatedAt_DESC, preview: $preview) {
+    profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
         name
         headline
@@ -442,7 +442,7 @@ const RESUME_QUERY = `
 
 const CONTACT_QUERY = `
   query PortfolioContact($preview: Boolean!) {
-    profileCollection(limit: 1, order: sys_updatedAt_DESC, preview: $preview) {
+    profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
         name
         headline
@@ -457,7 +457,7 @@ const CONTACT_QUERY = `
         location
       }
     }
-    siteSettingsCollection(limit: 1, order: sys_updatedAt_DESC, preview: $preview) {
+    siteSettingsCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
         contactCta
       }
