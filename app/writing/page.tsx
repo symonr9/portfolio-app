@@ -17,7 +17,7 @@ export default function WritingPage() {
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
           Writing
         </p>
-        <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">
+        <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
           A simple index for essays, updates, and notes.
         </h1>
         <p className="mt-5 text-lg leading-8 text-muted">
@@ -30,7 +30,7 @@ export default function WritingPage() {
         {posts.map((post) => (
           <article className="grid gap-3 py-6 md:grid-cols-[1fr_auto]" key={post}>
             <div>
-              <h2 className="text-2xl font-semibold">{post}</h2>
+              <h2 className="break-words text-2xl font-semibold">{post}</h2>
               <p className="mt-2 leading-7 text-muted">
                 Placeholder excerpt for a publishable content entry.
               </p>

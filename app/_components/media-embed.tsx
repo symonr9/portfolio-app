@@ -47,7 +47,7 @@ export function MediaEmbed({ embedUrl, title, videoUrl }: MediaEmbedProps) {
 
   return (
     <a
-      className="inline-flex font-semibold text-accent hover:text-foreground"
+      className="inline-flex break-words rounded-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       href={sourceUrl}
       rel="noreferrer"
       target="_blank"

@@ -21,7 +21,7 @@ export default async function ResumePage() {
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
             Resume
           </p>
-          <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">
+          <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
             Experience, capabilities, and selected highlights.
           </h1>
         </div>
@@ -32,7 +32,7 @@ export default async function ResumePage() {
               <dt className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
                 Location
               </dt>
-              <dd className="mt-1 font-semibold text-foreground">
+              <dd className="mt-1 break-words font-semibold text-foreground">
                 {profile.location ?? "Available by request"}
               </dd>
             </div>
@@ -40,7 +40,7 @@ export default async function ResumePage() {
               <dt className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
                 Contact
               </dt>
-              <dd className="mt-1 font-semibold text-foreground">
+              <dd className="mt-1 break-words font-semibold text-foreground">
                 {profile.email ?? "Add contact details in Contentful"}
               </dd>
             </div>
@@ -54,7 +54,7 @@ export default async function ResumePage() {
           <div className="mt-5 flex flex-wrap gap-2 lg:block lg:space-y-2">
             {expertiseTags.map((tag) => (
               <span
-                className="inline-flex rounded-sm border border-foreground/10 bg-surface px-3 py-2 text-sm text-muted lg:flex"
+                className="inline-flex rounded-sm border border-foreground/10 bg-surface px-3 py-2 text-sm text-muted break-words lg:flex"
                 key={tag.slug}
               >
                 {tag.name}
@@ -66,11 +66,11 @@ export default async function ResumePage() {
         <div className="divide-y divide-foreground/10 border-y border-foreground/10">
           {experiences.map((experience) => (
             <article
-              className="grid gap-5 py-7 md:grid-cols-[12rem_1fr]"
+              className="grid gap-5 py-7 md:grid-cols-[12rem_minmax(0,1fr)]"
               key={`${experience.title}-${experience.organization}`}
             >
               <div>
-                <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
+                <p className="break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
                   {experience.startDate} -{" "}
                   {experience.current ? "Present" : experience.endDate}
                 </p>
@@ -81,8 +81,8 @@ export default async function ResumePage() {
                 ) : null}
               </div>
               <div>
-                <h2 className="text-2xl font-semibold">{experience.title}</h2>
-                <p className="mt-1 text-muted">
+                <h2 className="break-words text-2xl font-semibold">{experience.title}</h2>
+                <p className="mt-1 break-words text-muted">
                   {[experience.organization, experience.location]
                     .filter(Boolean)
                     .join(" / ")}
@@ -92,7 +92,7 @@ export default async function ResumePage() {
                     {experience.description}
                   </p>
                 ) : null}
-                <ul className="mt-5 space-y-3">
+                <ul className="mt-5 list-disc space-y-3 pl-5">
                   {experience.achievements.map((achievement) => (
                     <li className="leading-7 text-muted" key={achievement}>
                       {achievement}

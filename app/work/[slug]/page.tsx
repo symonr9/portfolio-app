@@ -56,22 +56,22 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
         <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.92fr_0.58fr] lg:px-8">
           <div>
             <Link
-              className="text-sm font-semibold text-accent hover:text-foreground"
+              className="inline-flex rounded-sm text-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               href="/work"
             >
               Back to work
             </Link>
-            <p className="mt-8 font-mono text-xs uppercase tracking-[0.16em] text-muted">
+            <p className="mt-8 break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
               {sample.type} / {sample.publishDate}
             </p>
-            <h1 className="mt-4 text-5xl font-semibold leading-tight sm:text-6xl">
+            <h1 className="mt-4 break-words text-4xl font-semibold leading-tight sm:text-6xl">
               {sample.title}
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-muted">
               {sample.summary}
             </p>
           </div>
-          <aside className="rounded-sm border border-foreground/10 bg-surface p-6">
+          <aside className="rounded-sm border border-foreground/10 bg-surface p-5 sm:p-6">
             {sample.featuredImage ? (
               <ContentfulImage
                 className="mb-6 aspect-[16/9] w-full rounded-sm object-cover"
@@ -94,7 +94,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
                     <dt className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
                       {label}
                     </dt>
-                    <dd className="mt-1 font-semibold">{value}</dd>
+                    <dd className="mt-1 break-words font-semibold">{value}</dd>
                   </div>
                 ))}
             </dl>
@@ -104,14 +104,14 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
 
       <section className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.65fr_1fr] lg:px-8">
         <div>
-          <h2 className="text-3xl font-semibold">Overview</h2>
+          <h2 className="break-words text-3xl font-semibold">Overview</h2>
           <p className="mt-4 leading-7 text-muted">
             {sample.beforeText ?? sample.summary}
           </p>
           <div className="mt-6 flex flex-wrap gap-2">
             {sample.tags.map((tag) => (
               <span
-                className="rounded-sm border border-foreground/10 bg-surface px-3 py-2 text-sm text-muted"
+                className="rounded-sm border border-foreground/10 bg-surface px-3 py-2 text-sm text-muted break-words"
                 key={tag.slug}
               >
                 {tag.name}
@@ -120,7 +120,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
           </div>
         </div>
         <div>
-          <h2 className="text-3xl font-semibold">Detail</h2>
+          <h2 className="break-words text-3xl font-semibold">Detail</h2>
           <RichTextRenderer
             className="mt-6 space-y-6"
             content={sample.body}

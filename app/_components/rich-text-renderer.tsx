@@ -8,7 +8,7 @@ type RichTextRendererProps = {
   className?: string;
 };
 
-const blockClassName = "leading-8 text-muted";
+const blockClassName = "break-words leading-8 text-muted";
 
 export function RichTextRenderer({
   content,
@@ -54,31 +54,31 @@ function renderNode(
       ) : null;
     case "heading-2":
       return (
-        <h2 className="pt-4 text-3xl font-semibold text-foreground" key={key}>
+        <h2 className="break-words pt-4 text-3xl font-semibold text-foreground" key={key}>
           {children}
         </h2>
       );
     case "heading-3":
       return (
-        <h3 className="pt-3 text-2xl font-semibold text-foreground" key={key}>
+        <h3 className="break-words pt-3 text-2xl font-semibold text-foreground" key={key}>
           {children}
         </h3>
       );
     case "heading-4":
       return (
-        <h4 className="pt-2 text-xl font-semibold text-foreground" key={key}>
+        <h4 className="break-words pt-2 text-xl font-semibold text-foreground" key={key}>
           {children}
         </h4>
       );
     case "unordered-list":
       return (
-        <ul className="list-disc space-y-2 pl-6 text-muted" key={key}>
+        <ul className="list-disc space-y-2 pl-6 text-muted marker:text-accent" key={key}>
           {children}
         </ul>
       );
     case "ordered-list":
       return (
-        <ol className="list-decimal space-y-2 pl-6 text-muted" key={key}>
+        <ol className="list-decimal space-y-2 pl-6 text-muted marker:text-accent" key={key}>
           {children}
         </ol>
       );
@@ -124,7 +124,8 @@ function InlineLink({
   href: string;
 }) {
   const isInternal = href.startsWith("/");
-  const className = "font-semibold text-accent underline hover:text-foreground";
+  const className =
+    "break-words rounded-sm font-semibold text-accent underline hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
   return isInternal ? (
     <Link className={className} href={href}>
@@ -168,7 +169,7 @@ function renderEmbeddedAsset(
 
   return (
     <a
-      className="inline-flex font-semibold text-accent hover:text-foreground"
+      className="inline-flex break-words rounded-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       href={asset.url}
       key={key}
       rel="noreferrer"

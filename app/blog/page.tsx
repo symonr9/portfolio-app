@@ -34,7 +34,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
           Blog
         </p>
-        <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">
+        <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
           Notes, essays, and resources for the portfolio.
         </h1>
         <p className="mt-5 text-lg leading-8 text-muted">
@@ -47,20 +47,20 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
       <div className="mt-10 divide-y divide-foreground/10 border-y border-foreground/10">
         {filteredPosts.map((post) => (
           <article
-            className="grid gap-5 py-7 md:grid-cols-[10rem_1fr_12rem]"
+            className="grid gap-5 py-7 md:grid-cols-[10rem_minmax(0,1fr)_12rem]"
             key={post.slug}
           >
             <PostCover post={post} />
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
+              <p className="break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
                 {post.publishDate} / {post.readingTime}
               </p>
-              <h2 className="mt-3 text-2xl font-semibold">{post.title}</h2>
+              <h2 className="mt-3 break-words text-2xl font-semibold">{post.title}</h2>
               <p className="mt-3 leading-7 text-muted">{post.excerpt}</p>
               <div className="mt-5 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
                   <span
-                    className="rounded-sm border border-foreground/10 bg-surface px-2 py-1 text-xs text-muted"
+                    className="rounded-sm border border-foreground/10 bg-surface px-2 py-1 text-xs text-muted break-words"
                     key={tag.slug}
                   >
                     {tag.name}
@@ -70,7 +70,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             </div>
             <div className="md:text-right">
               <Link
-                className="inline-flex text-sm font-semibold text-accent hover:text-foreground"
+                className="inline-flex rounded-sm text-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 href={`/blog/${post.slug}`}
               >
                 Read post

@@ -56,15 +56,15 @@ export default async function BlogDetailPage({ params }: BlogDetailProps) {
       <header className="border-b border-foreground/10">
         <div className="mx-auto w-full max-w-3xl px-5 py-16 lg:px-8">
           <Link
-            className="text-sm font-semibold text-accent hover:text-foreground"
+            className="inline-flex rounded-sm text-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             href="/blog"
           >
             Back to blog
           </Link>
-          <p className="mt-8 font-mono text-xs uppercase tracking-[0.16em] text-muted">
+          <p className="mt-8 break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
             {post.publishDate} / {post.readingTime}
           </p>
-          <h1 className="mt-4 text-5xl font-semibold leading-tight sm:text-6xl">
+          <h1 className="mt-4 break-words text-4xl font-semibold leading-tight sm:text-6xl">
             {post.title}
           </h1>
           <p className="mt-6 text-lg leading-8 text-muted">{post.excerpt}</p>
@@ -79,7 +79,7 @@ export default async function BlogDetailPage({ params }: BlogDetailProps) {
           <div className="mt-6 flex flex-wrap gap-2">
             {post.tags.map((tag) => (
               <span
-                className="rounded-sm border border-foreground/10 bg-surface px-3 py-2 text-sm text-muted"
+                className="rounded-sm border border-foreground/10 bg-surface px-3 py-2 text-sm text-muted break-words"
                 key={tag.slug}
               >
                 {tag.name}
@@ -95,16 +95,16 @@ export default async function BlogDetailPage({ params }: BlogDetailProps) {
           content={post.body}
         />
 
-        <aside className="h-fit rounded-sm border border-foreground/10 bg-surface p-6">
+        <aside className="h-fit rounded-sm border border-foreground/10 bg-surface p-5 sm:p-6">
           <h2 className="text-lg font-semibold">Related work</h2>
           <div className="mt-4 space-y-4">
             {relatedWork.map((sample) => (
               <Link
-                className="block border-t border-foreground/10 pt-4 hover:text-accent"
+                className="block rounded-sm border-t border-foreground/10 pt-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                 href={`/work/${sample.slug}`}
                 key={sample.slug}
               >
-                <span className="font-semibold">{sample.title}</span>
+                <span className="break-words font-semibold">{sample.title}</span>
                 <span className="mt-1 block text-sm leading-6 text-muted">
                   {sample.summary}
                 </span>

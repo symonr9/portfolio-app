@@ -12,6 +12,11 @@ export const metadata: Metadata = buildPageMetadata({
 export default async function ContactPage() {
   const contentfulOptions = await getContentfulDraftOptions();
   const { contactCta, profile } = await getContactPageData(contentfulOptions);
+  const contactItems: [string, string | null | undefined][] = [
+    ["Email", profile.email],
+    ["Location", profile.location],
+    ["Profile", profile.name],
+  ];
 
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
@@ -19,7 +24,7 @@ export default async function ContactPage() {
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
           Contact
         </p>
-        <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">
+        <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
           A dedicated path for inquiries, collaboration, or conversation.
         </h1>
         <p className="mt-5 text-lg leading-8 text-muted">
@@ -29,22 +34,41 @@ export default async function ContactPage() {
       </div>
 
       <div className="mt-10 grid gap-4 md:grid-cols-3">
-        {[
-          ["Email", profile.email],
-          ["Location", profile.location],
-          ["Profile", profile.name],
-        ].map(([item, value]) => (
+        {contactItems.map(([item, value]) => (
           <article
             className="rounded-sm border border-foreground/10 bg-surface p-6"
             key={item}
           >
-            <h2 className="text-xl font-semibold">{item}</h2>
-            <p className="mt-3 leading-7 text-muted">
-              {value ?? "Add this detail in Contentful."}
-            </p>
+            <h2 className="break-words text-xl font-semibold">{item}</h2>
+            <ContactValue label={item} value={value} />
           </article>
         ))}
       </div>
     </section>
+  );
+}
+
+function ContactValue({
+  label,
+  value,
+}: {
+  label: string;
+  value?: string | null;
+}) {
+  if (label === "Email" && value) {
+    return (
+      <a
+        className="mt-3 inline-flex break-all rounded-sm leading-7 text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        href={`mailto:${value}`}
+      >
+        {value}
+      </a>
+    );
+  }
+
+  return (
+    <p className="mt-3 break-words leading-7 text-muted">
+      {value ?? "Add this detail in Contentful."}
+    </p>
   );
 }

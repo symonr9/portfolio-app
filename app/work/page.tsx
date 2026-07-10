@@ -34,7 +34,7 @@ export default async function WorkPage({ searchParams }: WorkPageProps) {
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
           Work
         </p>
-        <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">
+        <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
           Selected work samples with context, process, and outcomes.
         </h1>
         <p className="mt-5 text-lg leading-8 text-muted">
@@ -47,7 +47,7 @@ export default async function WorkPage({ searchParams }: WorkPageProps) {
       <div className="mt-10 grid gap-5 md:grid-cols-2">
         {filteredSamples.map((sample) => (
           <Link
-            className="group rounded-sm border border-foreground/10 bg-surface p-6 transition-transform hover:-translate-y-1"
+            className="group rounded-sm border border-foreground/10 bg-surface p-5 transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:p-6"
             href={`/work/${sample.slug}`}
             key={sample.slug}
           >
@@ -61,7 +61,7 @@ export default async function WorkPage({ searchParams }: WorkPageProps) {
               <MediaPlaceholder className="mb-6 aspect-[16/9] rounded-sm" />
             )}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
+              <span className="break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
                 {sample.type}
               </span>
               {sample.featured ? (
@@ -70,21 +70,21 @@ export default async function WorkPage({ searchParams }: WorkPageProps) {
                 </span>
               ) : null}
             </div>
-            <h2 className="mt-8 text-2xl font-semibold">{sample.title}</h2>
+            <h2 className="mt-8 break-words text-2xl font-semibold">{sample.title}</h2>
             <p className="mt-3 leading-7 text-muted">
               {sample.summary}
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {sample.tags.map((tag) => (
                 <span
-                  className="rounded-sm border border-foreground/10 px-2 py-1 text-xs text-muted"
+                  className="rounded-sm border border-foreground/10 px-2 py-1 text-xs text-muted break-words"
                   key={tag.slug}
                 >
                   {tag.name}
                 </span>
               ))}
             </div>
-            <span className="mt-6 inline-flex text-sm font-semibold text-accent group-hover:text-foreground">
+            <span className="mt-6 inline-flex text-sm font-semibold text-accent group-hover:text-foreground group-focus-visible:text-foreground">
               View case detail
             </span>
           </Link>

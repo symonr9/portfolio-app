@@ -42,10 +42,26 @@ html {
   scroll-padding-top: 96px;
 }
 
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  max-width: 100%;
+}
+
+main:focus {
+  outline: none;
 }
 
 ::selection {
@@ -56,4 +72,19 @@ body {
 a {
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.18em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

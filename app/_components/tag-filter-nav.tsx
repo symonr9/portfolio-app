@@ -19,6 +19,7 @@ export function TagFilterNav({
   return (
     <nav aria-label="Filter by tag" className="mt-8 flex flex-wrap gap-2">
       <Link
+        aria-current={!selectedTag ? "page" : undefined}
         className={getClassName(!selectedTag)}
         href={basePath}
       >
@@ -26,6 +27,7 @@ export function TagFilterNav({
       </Link>
       {tags.map((tag) => (
         <Link
+          aria-current={selectedTag === tag.slug ? "page" : undefined}
           className={getClassName(selectedTag === tag.slug)}
           href={`${basePath}?tag=${encodeURIComponent(tag.slug)}`}
           key={tag.slug}
@@ -43,5 +45,6 @@ function getClassName(active: boolean) {
     active
       ? "border-accent bg-accent text-accent-contrast"
       : "border-foreground/10 bg-surface text-muted hover:text-foreground",
+    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
   ].join(" ");
 }

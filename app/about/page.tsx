@@ -23,7 +23,7 @@ export default async function AboutPage() {
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
             About
           </p>
-          <h1 className="mt-4 text-4xl font-semibold sm:text-5xl">
+          <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
             {profile.headline}
           </h1>
           {profile.portrait ? (
@@ -45,7 +45,7 @@ export default async function AboutPage() {
       <section className="border-t border-foreground/10 bg-surface">
         <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.42fr_1fr] lg:px-8">
           <div>
-            <h2 className="text-3xl font-semibold">Recent experience</h2>
+            <h2 className="break-words text-3xl font-semibold">Recent experience</h2>
             <p className="mt-4 leading-7 text-muted">
               A compact preview of resume-style entries powered by the same
               Contentful experience data as the resume page.
@@ -57,14 +57,14 @@ export default async function AboutPage() {
                 className="rounded-sm border border-foreground/10 bg-background p-6"
                 key={`${experience.title}-${experience.organization}`}
               >
-                <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
+                <p className="break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
                   {experience.startDate} -{" "}
                   {experience.current ? "Present" : experience.endDate}
                 </p>
-                <h3 className="mt-3 text-2xl font-semibold">
+                <h3 className="mt-3 break-words text-2xl font-semibold">
                   {experience.title}
                 </h3>
-                <p className="mt-2 text-muted">
+                <p className="mt-2 break-words text-muted">
                   {[experience.organization, experience.location]
                     .filter(Boolean)
                     .join(" / ")}
