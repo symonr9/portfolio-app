@@ -138,7 +138,19 @@ function getRevalidateSeconds() {
 
 async function readErrorMessage(response: Response) {
   try {
-    const body = (await response.json()) as { message?: string };
+    const body = (await response.json()) as {
+      errors?: GraphQLError[];
+      message?: string;
+    };
+    const errors = body.errors
+      ?.map((error) => error.message)
+      .filter(Boolean)
+      .join("; ");
+
+    if (errors) {
+      return ` - ${errors}`;
+    }
+
     return body.message ? ` - ${body.message}` : "";
   } catch {
     return "";
