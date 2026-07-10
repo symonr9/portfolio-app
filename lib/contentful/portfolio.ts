@@ -262,13 +262,17 @@ const BLOG_CARD_FIELDS = `
   coverImage {
     ${ASSET_FIELDS}
   }
-  body {
-    ${RICH_TEXT_FIELDS}
-  }
   tagsCollection(limit: 8, preview: $preview) {
     items {
       ${TAG_FIELDS}
     }
+  }
+`;
+
+const BLOG_DETAIL_FIELDS = `
+  ${BLOG_CARD_FIELDS}
+  body {
+    ${RICH_TEXT_FIELDS}
   }
 `;
 
@@ -346,7 +350,7 @@ const BLOG_POST_QUERY = `
   query BlogPost($slug: String!, $preview: Boolean!) {
     blogPostCollection(limit: 1, where: { slug: $slug }, preview: $preview) {
       items {
-        ${BLOG_CARD_FIELDS}
+        ${BLOG_DETAIL_FIELDS}
         relatedWorkSamplesCollection(limit: 4, preview: $preview) {
           items {
             title
@@ -637,7 +641,9 @@ function mapBlogPosts(items?: BlogPostItem[] | null): BlogPost[] {
         slug: item.slug,
         excerpt: item.excerpt,
         publishDate: item.publishDate,
-        readingTime: getReadingTime(body),
+        readingTime: body
+          ? getReadingTime(body)
+          : getReadingTimeFromText(item.excerpt),
         tags: mapTags(item.tagsCollection?.items),
         coverImage: mapAsset(item.coverImage),
         body,
@@ -748,6 +754,18 @@ function getReadingTime(field: RichTextDocument | null) {
     .trim()
     .split(/\s+/)
     .filter(Boolean).length;
+  return formatReadingTime(words);
+}
+
+function getReadingTimeFromText(text: string) {
+  const words = text
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
+  return formatReadingTime(words);
+}
+
+function formatReadingTime(words: number) {
   const minutes = Math.max(1, Math.ceil(words / 200));
   return `${minutes} min read`;
 }
