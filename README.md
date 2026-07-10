@@ -83,3 +83,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ## Next.js Deployment Notes
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Contentful Model Importing
+`npm install -g contentful-cli`
+`contentful login`
+`contentful space import --space-id <space-id> --content-file docs/contentful-import-content-models.json --content-model-only`
