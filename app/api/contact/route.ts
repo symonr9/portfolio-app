@@ -26,11 +26,13 @@ const rateLimitStore = new Map<string, RateLimitRecord>();
 
 export async function POST(request: Request) {
   const resendApiKey = process.env.RESEND_API_KEY;
-  const contactTo = process.env.CONTACT_TO_EMAIL ?? process.env.CONTACT_TO;
+  const contactTo = parseEmailList(
+    process.env.CONTACT_TO_EMAIL ?? process.env.CONTACT_TO,
+  );
   const contactFrom =
-    process.env.CONTACT_FROM_EMAIL ?? process.env.CONTACT_FROM;
+    process.env.CONTACT_FROM_EMAIL?.trim() ?? process.env.CONTACT_FROM?.trim();
 
-  if (!resendApiKey || !contactTo || !contactFrom) {
+  if (!resendApiKey || contactTo.length === 0 || !contactFrom) {
     return jsonError("Contact delivery is not configured.", 500);
   }
 
@@ -109,7 +111,7 @@ export async function POST(request: Request) {
     },
     body: JSON.stringify({
       from: contactFrom,
-      to: [contactTo],
+      to: contactTo,
       reply_to: fromEmail,
       subject: emailSubject,
       text: emailText,
@@ -118,7 +120,20 @@ export async function POST(request: Request) {
   });
 
   if (!resendResponse.ok) {
-    return jsonError("The message could not be sent. Please try again later.", 502);
+    const resendError = await readResendError(resendResponse);
+    console.warn(
+      [
+        "Contact form delivery failed:",
+        `status=${resendResponse.status}`,
+        `type=${redactSensitiveText(resendError.type ?? "unknown")}`,
+        `message=${redactSensitiveText(resendError.message)}`,
+      ].join(" "),
+    );
+
+    return jsonError(
+      getPublicDeliveryError(resendResponse.status, resendError),
+      getDeliveryStatus(resendResponse.status),
+    );
   }
 
   return NextResponse.json({
@@ -137,6 +152,15 @@ function getText(formData: FormData, key: string) {
 
 function cleanText(value: string, maxLength: number) {
   return value.replace(/\0/g, "").trim().slice(0, maxLength);
+}
+
+function parseEmailList(value: string | undefined) {
+  return (
+    value
+      ?.split(",")
+      .map((item) => item.trim())
+      .filter(Boolean) ?? []
+  );
 }
 
 function isValidEmail(value: string) {
@@ -262,4 +286,100 @@ async function validateTurnstileIfConfigured(formData: FormData, ip: string) {
   return result.success
     ? null
     : "Verification failed. Please refresh and try again.";
+}
+
+type ResendError = {
+  message: string;
+  type?: string;
+};
+
+async function readResendError(response: Response): Promise<ResendError> {
+  const contentType = response.headers.get("content-type") ?? "";
+  try {
+    if (contentType.includes("application/json")) {
+      const body = (await response.json()) as {
+        message?: unknown;
+        name?: unknown;
+        type?: unknown;
+        error?: { message?: unknown; name?: unknown; type?: unknown };
+      };
+      const error = body.error;
+      return {
+        message:
+          getString(error?.message) ??
+          getString(body.message) ??
+          "Resend rejected the message.",
+        type:
+          getString(error?.type) ??
+          getString(error?.name) ??
+          getString(body.type) ??
+          getString(body.name),
+      };
+    }
+
+    return {
+      message: (await response.text()) || "Resend rejected the message.",
+    };
+  } catch {
+    return { message: "Resend rejected the message." };
+  }
+}
+
+function getString(value: unknown) {
+  return typeof value === "string" ? value : undefined;
+}
+
+function getDeliveryStatus(resendStatus: number) {
+  if ([400, 401, 403, 422, 429].includes(resendStatus)) {
+    return 502;
+  }
+
+  return 502;
+}
+
+function getPublicDeliveryError(status: number, error: ResendError) {
+  const message = error.message.toLowerCase();
+  const type = error.type?.toLowerCase() ?? "";
+
+  if (
+    status === 403 &&
+    (message.includes("testing emails") || message.includes("verify a domain"))
+  ) {
+    return "Contact delivery needs a verified Resend sender domain or a matching test recipient.";
+  }
+
+  if (
+    status === 403 &&
+    (message.includes("domain is not verified") ||
+      message.includes("not verified") ||
+      type.includes("validation"))
+  ) {
+    return "Contact delivery needs CONTACT_FROM_EMAIL to use a verified Resend domain.";
+  }
+
+  if (status === 401 || status === 403 || type.includes("api_key")) {
+    return "Contact delivery could not authenticate with Resend. Check the server API key.";
+  }
+
+  if (status === 422 && type.includes("invalid_from")) {
+    return "Contact delivery needs CONTACT_FROM_EMAIL in a valid sender format.";
+  }
+
+  if (status === 422 && type.includes("invalid_attachment")) {
+    return "The attachment could not be accepted by the email provider.";
+  }
+
+  if (status === 429 || type.includes("quota") || type.includes("rate_limit")) {
+    return "Contact delivery is temporarily rate limited by the email provider.";
+  }
+
+  return "The message could not be sent. Please try again later.";
+}
+
+function redactSensitiveText(value: string) {
+  return value
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "[email]")
+    .replace(/https?:\/\/\S+/gi, "[url]")
+    .replace(/\b(?:[a-z0-9-]+\.)+[a-z]{2,}\b/gi, "[domain]")
+    .replace(/re_[A-Za-z0-9_:-]+/g, "[api-key]");
 }

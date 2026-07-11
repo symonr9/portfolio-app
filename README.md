@@ -31,7 +31,7 @@ Create a local `.env.local` from `.env.example` and set:
 - `CONTENTFUL_REVALIDATE_SECRET` (shared secret for the Contentful webhook)
 - `RESEND_API_KEY` (server-only API key for forwarding contact form submissions)
 - `CONTACT_TO_EMAIL` (server-only destination for contact form submissions)
-- `CONTACT_FROM_EMAIL` (verified Resend sender address used for outbound form mail)
+- `CONTACT_FROM_EMAIL` (verified Resend sender address used for outbound form mail, for example `Portfolio <contact@verified-domain.com>`)
 - `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (optional public Cloudflare Turnstile site key)
 - `TURNSTILE_SECRET_KEY` (optional server-only Cloudflare Turnstile secret)
 
@@ -51,6 +51,8 @@ Do not mark `NEXT_PUBLIC_SITE_URL`, `CONTENTFUL_SPACE_ID`, or `CONTENTFUL_ENVIRO
 ## Contact Form Delivery
 
 The `/contact` page posts to a server-side route at `/api/contact`, which forwards submissions with Resend. The recipient email is never rendered in the browser; configure it only through `CONTACT_TO_EMAIL` in local and Netlify environment variables.
+
+Resend requires `CONTACT_FROM_EMAIL` to use a verified sender domain. For account testing with Resend's shared sender, the recipient must match the Resend account's own email; for normal portfolio inquiries, verify a domain in Resend and use an address on that domain.
 
 The contact route accepts one optional attachment and only forwards PDF or DOCX files up to 8 MB. It also includes a hidden honeypot field, rejects unrealistically fast submissions, applies basic in-memory per-IP rate limiting, and can verify Cloudflare Turnstile when `TURNSTILE_SECRET_KEY` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` are configured.
 
