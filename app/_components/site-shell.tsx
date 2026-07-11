@@ -32,9 +32,9 @@ export function SiteShell({
           >
             {profile.avatar ? (
               <ContentfulImage
-                className="size-8 shrink-0 rounded-sm border border-foreground/15 object-cover shadow-sm transition-transform group-hover:-translate-y-0.5"
+                className="size-12 shrink-0 rounded-sm border border-foreground/15 object-cover shadow-sm transition-transform group-hover:-translate-y-0.5"
                 image={profile.avatar}
-                sizes="32px"
+                sizes="60px"
               />
             ) : (
               <span className="grid size-8 shrink-0 place-items-center rounded-sm border border-foreground/15 bg-foreground text-xs font-semibold text-background shadow-sm transition-transform group-hover:-translate-y-0.5">
