@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getContentfulDraftOptions, getHomePageData } from "@/lib/contentful";
+import { ButterflyFlight } from "./_components/butterfly-flight";
 import { ContentfulImage, MediaPlaceholder } from "./_components/contentful-image";
 
 export default async function Home() {
@@ -42,6 +43,7 @@ export default async function Home() {
                 Read blog
               </Link>
             </div>
+            <ButterflyFlight />
           </div>
         </div>
       </section>

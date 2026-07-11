@@ -59,6 +59,139 @@ a {
   text-underline-offset: 0.18em;
 }
 
+.hero-butterfly-flight {
+  display: block;
+  height: clamp(5.5rem, 11vw, 8.5rem);
+  margin-top: clamp(1.75rem, 4vw, 3rem);
+  overflow: visible;
+  width: 100%;
+}
+
+.hero-butterfly-guide {
+  fill: none;
+  opacity: 0.82;
+  stroke: var(--foreground-light);
+  stroke-dasharray: 10 15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.hero-butterfly-trail-mask {
+  fill: none;
+  stroke: #fff;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0.985;
+  stroke-linecap: round;
+  stroke-width: 18;
+}
+
+.hero-butterfly-drift {
+  animation: hero-butterfly-drift 1.25s ease-in-out infinite;
+  transform: scale(0.68);
+}
+
+.hero-butterfly-wing,
+.hero-butterfly-body-dot,
+.hero-butterfly-head {
+  fill: var(--foreground-light);
+}
+
+.hero-butterfly-wing {
+  transform-box: fill-box;
+  transform-origin: 8% 50%;
+}
+
+.hero-butterfly-wing-back {
+  animation: hero-butterfly-wing-back 0.54s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+  opacity: 0.52;
+}
+
+.hero-butterfly-wing-front {
+  animation: hero-butterfly-wing-front 0.54s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+.hero-butterfly-body-dot,
+.hero-butterfly-head {
+  opacity: 0.95;
+}
+
+.hero-butterfly-antenna {
+  fill: none;
+  stroke: var(--foreground-light);
+  stroke-linecap: round;
+  stroke-width: 2.4;
+}
+
+@keyframes hero-butterfly-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg) scale(0.68);
+  }
+
+  26% {
+    transform: translateY(-5px) rotate(4deg) scale(0.68);
+  }
+
+  54% {
+    transform: translateY(4px) rotate(-3deg) scale(0.68);
+  }
+
+  76% {
+    transform: translateY(-3px) rotate(2deg) scale(0.68);
+  }
+}
+
+@keyframes hero-butterfly-wing-front {
+  0%,
+  100% {
+    transform: scaleX(1) scaleY(1) rotate(-8deg) translate(0, 0);
+  }
+
+  18% {
+    transform: scaleX(0.7) scaleY(1.04) rotate(6deg) translate(-1px, 1px);
+  }
+
+  39% {
+    transform: scaleX(0.22) scaleY(1.12) rotate(18deg) translate(-3px, 2px);
+  }
+
+  57% {
+    transform: scaleX(0.48) scaleY(1.08) rotate(3deg) translate(-2px, 1px);
+  }
+
+  74% {
+    transform: scaleX(1.08) scaleY(0.96) rotate(-15deg) translate(1px, -1px);
+  }
+
+  88% {
+    transform: scaleX(0.86) scaleY(1.02) rotate(-4deg) translate(0, 0);
+  }
+}
+
+@keyframes hero-butterfly-wing-back {
+  0%,
+  100% {
+    transform: scaleX(0.78) scaleY(1) rotate(6deg) translate(0, 0);
+  }
+
+  20% {
+    transform: scaleX(0.52) scaleY(1.04) rotate(-3deg) translate(-1px, 1px);
+  }
+
+  41% {
+    transform: scaleX(0.16) scaleY(1.1) rotate(-14deg) translate(-3px, 2px);
+  }
+
+  61% {
+    transform: scaleX(0.43) scaleY(1.06) rotate(6deg) translate(-2px, 1px);
+  }
+
+  79% {
+    transform: scaleX(0.9) scaleY(0.96) rotate(15deg) translate(1px, -1px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
@@ -71,5 +204,13 @@ a {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .hero-butterfly-guide {
+    stroke-dashoffset: 0;
+  }
+
+  .hero-butterfly-trail-mask {
+    stroke-dashoffset: -0.015;
   }
 }
