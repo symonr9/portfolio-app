@@ -47,10 +47,17 @@ export default async function Home() {
       </section>
 
       <section className="border-b border-foreground/10 bg-surface">
-        <div className="mx-auto w-full max-w-6xl px-5 py-12 lg:px-8">
-          <p className="max-w-3xl text-lg leading-8 text-muted">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-5 py-12 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <p className="max-w-3xl flex-1 text-lg leading-8 text-muted">
             {profile.shortBio}
           </p>
+          {profile.avatar ? (
+            <ContentfulImage
+              className="size-36 shrink-0 rounded-sm border border-foreground/10 object-cover shadow-[0_18px_60px_rgba(31,41,55,0.08)] sm:size-40 lg:size-44"
+              image={profile.avatar}
+              sizes="(min-width: 1024px) 176px, (min-width: 640px) 160px, 144px"
+            />
+          ) : null}
         </div>
       </section>
 
