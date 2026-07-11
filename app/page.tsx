@@ -64,7 +64,7 @@ export default async function Home() {
       <section className="mx-auto grid w-full max-w-6xl gap-4 px-5 py-16 lg:grid-cols-3 lg:px-8">
         {featuredWork.map((sample, index) => (
           <Link
-            className="group rounded-sm border border-foreground/10 bg-background/72 p-5 shadow-[0_18px_60px_var(--shadow-soft)] backdrop-blur transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            className="group rounded-sm border border-foreground/10 bg-background/22 p-5 shadow-[0_18px_60px_var(--shadow-soft)] backdrop-blur transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
             href={`/work/${sample.slug}`}
             key={sample.slug}
           >

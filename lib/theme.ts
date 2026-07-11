@@ -3,7 +3,7 @@ export const colorScheme = {
   secondary: "#BABCC0",
   accent: "#F0D69A",
   accentText: "#755A1A",
-  background: "#FCF7F9",
+  background: "#fff7f2",
   foreground: "#2B2428",
   foregroundLight: "#FFF9FB",
   muted: "#665B61",

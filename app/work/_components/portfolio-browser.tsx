@@ -31,6 +31,14 @@ const categories: PortfolioCategory[] = [
 const defaultSortField: SortField = "publishDate";
 const defaultSortDirection: SortDirection = "desc";
 
+const categoryBackgrounds: Record<WorkSampleType, string> = {
+  art: "/art.png",
+  photography: "/photography.png",
+  publishing: "/publishing.png",
+  "social-media": "/social-media.png",
+  writing: "/writing.png",
+};
+
 export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [query, setQuery] = useState("");
@@ -172,128 +180,41 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
 function PortfolioBackground({ activeType }: { activeType: WorkSampleType }) {
   return (
     <div aria-hidden="true" className={styles.backgroundWrap}>
-      <PillarScene
-        active={activeType === "writing"}
-        image="/quill.png"
-        imageClassName={styles.quillImage}
-      />
-      <PillarScene
-        active={activeType === "social-media"}
-        image="/hearts.jpg"
-        imageClassName={styles.heartsImage}
-      />
-      <PillarScene
-        active={activeType === "art"}
-        image="/flowers.png"
-        imageClassName={styles.flowersImage}
-      />
-      <PhotographyScene active={activeType === "photography"} />
-      <PublishingScene active={activeType === "publishing"} />
-    </div>
-  );
-}
-
-function PillarScene({
-  active,
-  image,
-  imageClassName,
-}: {
-  active: boolean;
-  image: string;
-  imageClassName: string;
-}) {
-  return (
-    <div className={sceneClassName(active)}>
-      <DecorativeImage
-        className={`${styles.pillar} ${styles.pillarLeft}`}
-        imageClassName={imageClassName}
-        sizes="(min-width: 1024px) 12vw, 18vw"
-        src={image}
-      />
-      <DecorativeImage
-        className={`${styles.pillar} ${styles.pillarRight} ${styles.mirrored}`}
-        imageClassName={imageClassName}
-        sizes="(min-width: 1024px) 12vw, 18vw"
-        src={image}
-      />
-    </div>
-  );
-}
-
-function PhotographyScene({ active }: { active: boolean }) {
-  return (
-    <div className={sceneClassName(active)}>
-      <DecorativeImage
-        className={styles.stringLights}
-        imageClassName={styles.stringLightsImage}
-        sizes="(min-width: 1152px) 72rem, 100vw"
-        src="/string-lights.jpg"
-      />
-    </div>
-  );
-}
-
-function PublishingScene({ active }: { active: boolean }) {
-  return (
-    <div className={sceneClassName(active)}>
-      <DecorativeImage
-        className={`${styles.bookStack} ${styles.bookStackTab}`}
-        imageClassName={styles.booksImage}
-        sizes="140px"
-        src="/books.png"
-      />
-      <DecorativeImage
-        className={`${styles.bookStack} ${styles.bookStackLeftHigh}`}
-        imageClassName={styles.booksImage}
-        sizes="160px"
-        src="/books.png"
-      />
-      <DecorativeImage
-        className={`${styles.bookStack} ${styles.bookStackLeftLow}`}
-        imageClassName={styles.booksImage}
-        sizes="130px"
-        src="/books.png"
-      />
-      <DecorativeImage
-        className={`${styles.bookStack} ${styles.bookStackRight} ${styles.mirrored}`}
-        imageClassName={styles.booksImage}
-        sizes="190px"
-        src="/books.png"
-      />
+      {categories.map((category) => (
+        <DecorativeImage
+          active={activeType === category.type}
+          key={category.type}
+          src={categoryBackgrounds[category.type]}
+        />
+      ))}
     </div>
   );
 }
 
 function DecorativeImage({
-  className,
-  imageClassName,
-  sizes,
+  active,
   src,
 }: {
-  className: string;
-  imageClassName: string;
-  sizes: string;
+  active: boolean;
   src: string;
 }) {
   return (
-    <span className={className}>
+    <span
+      className={[
+        styles.backgroundScene,
+        active ? styles.backgroundSceneActive : "",
+      ].join(" ")}
+    >
       <Image
         alt=""
-        className={imageClassName}
+        className={styles.backgroundImage}
         fill
         priority
-        sizes={sizes}
+        sizes="(min-width: 1024px) 22rem, (min-width: 640px) 18rem, 58vw"
         src={src}
       />
     </span>
   );
-}
-
-function sceneClassName(active: boolean) {
-  return [
-    styles.backgroundScene,
-    active ? styles.backgroundSceneActive : "",
-  ].join(" ");
 }
 
 function PortfolioSampleList({

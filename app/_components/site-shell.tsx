@@ -23,7 +23,7 @@ export function SiteShell({
         Skip to content
       </a>
       <DraftPreviewBanner />
-      <header className="sticky top-0 z-50 border-b border-foreground/10 bg-background/88 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-foreground/10 bg-primary/88 backdrop-blur-xl">
         <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-5 gap-y-2 px-5 py-2.5 lg:px-8">
           <Link
             href="/"
