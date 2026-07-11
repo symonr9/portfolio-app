@@ -8,6 +8,7 @@ import {
 } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
 import { ContentfulImage, MediaPlaceholder } from "../../_components/contentful-image";
+import { MediaGallery } from "../../_components/media-gallery";
 import { MediaEmbed } from "../../_components/media-embed";
 import { RichTextRenderer } from "../../_components/rich-text-renderer";
 
@@ -131,18 +132,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
             title={`${sample.title} media`}
             videoUrl={sample.videoUrl}
           />
-          {sample.gallery.length ? (
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              {sample.gallery.map((image) => (
-                <ContentfulImage
-                  className="aspect-[4/3] w-full rounded-sm border border-foreground/10 object-cover"
-                  image={image}
-                  key={image.id}
-                  sizes="(min-width: 640px) 50vw, 100vw"
-                />
-              ))}
-            </div>
-          ) : null}
+          <MediaGallery items={sample.gallery} />
           {sample.outcome ? (
             <div className="mt-10 rounded-sm border border-foreground/10 bg-surface p-6">
               <h2 className="text-2xl font-semibold">Outcome</h2>

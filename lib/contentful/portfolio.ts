@@ -16,6 +16,26 @@ export type ContentfulImage = {
   contentType: string | null;
 };
 
+export type ContentfulFile = {
+  id: string;
+  url: string;
+  title: string;
+  description: string | null;
+  fileName: string;
+  contentType: string | null;
+};
+
+export type ContentfulMediaAsset = {
+  id: string;
+  url: string;
+  title: string;
+  description: string | null;
+  fileName: string;
+  contentType: string | null;
+  width: number | null;
+  height: number | null;
+};
+
 export type RichTextMark = {
   type?: string;
 };
@@ -52,6 +72,7 @@ export type Profile = {
   location: string | null;
   portrait: ContentfulImage | null;
   avatar: ContentfulImage | null;
+  resumePdf: ContentfulFile | null;
 };
 
 export type WorkSample = {
@@ -65,7 +86,7 @@ export type WorkSample = {
   featured: boolean;
   tags: Tag[];
   featuredImage: ContentfulImage | null;
-  gallery: ContentfulImage[];
+  gallery: ContentfulMediaAsset[];
   videoUrl: string | null;
   embedUrl: string | null;
   body: RichTextDocument | null;
@@ -123,6 +144,7 @@ type AssetItem = {
   description?: string | null;
   width?: number | null;
   height?: number | null;
+  fileName?: string | null;
   contentType?: string | null;
 } | null;
 
@@ -174,6 +196,7 @@ type ProfileItem = {
   longBio?: RichTextField;
   portrait?: AssetItem;
   avatar?: AssetItem;
+  resumePdf?: AssetItem;
   email?: string | null;
   location?: string | null;
 } | null;
@@ -207,6 +230,7 @@ const ASSET_FIELDS = `
   description
   width
   height
+  fileName
   contentType
 `;
 
@@ -233,6 +257,9 @@ const PROFILE_FIELDS = `
     ${ASSET_FIELDS}
   }
   avatar {
+    ${ASSET_FIELDS}
+  }
+  resumePdf {
     ${ASSET_FIELDS}
   }
   email
@@ -602,6 +629,7 @@ function firstProfile(items?: ProfileItem[] | null): Profile {
     location: item.location ?? null,
     portrait: mapAsset(item.portrait),
     avatar: mapAsset(item.avatar),
+    resumePdf: mapFileAsset(item.resumePdf),
   };
 }
 
@@ -623,7 +651,7 @@ function mapWorkSamples(items?: WorkSampleItem[] | null): WorkSample[] {
         featured: Boolean(item.featured),
         tags: mapTags(item.tagsCollection?.items),
         featuredImage: mapAsset(item.featuredImage),
-        gallery: mapAssets(item.galleryCollection?.items),
+        gallery: mapMediaAssets(item.galleryCollection?.items),
         videoUrl: item.videoUrl ?? null,
         embedUrl: item.embedUrl ?? null,
         body: normalizeRichText(item.body),
@@ -704,6 +732,13 @@ function mapAssets(items?: AssetItem[] | null): ContentfulImage[] {
   });
 }
 
+function mapMediaAssets(items?: AssetItem[] | null): ContentfulMediaAsset[] {
+  return (items ?? []).flatMap((item) => {
+    const asset = mapMediaAsset(item);
+    return asset ? [asset] : [];
+  });
+}
+
 function mapAsset(item?: AssetItem): ContentfulImage | null {
   if (!item?.sys?.id || !item.url || !item.title || !item.width || !item.height) {
     return null;
@@ -716,6 +751,38 @@ function mapAsset(item?: AssetItem): ContentfulImage | null {
     description: item.description ?? null,
     width: item.width,
     height: item.height,
+    contentType: item.contentType ?? null,
+  };
+}
+
+function mapMediaAsset(item?: AssetItem): ContentfulMediaAsset | null {
+  if (!item?.sys?.id || !item.url || !item.title) {
+    return null;
+  }
+
+  return {
+    id: item.sys.id,
+    url: normalizeAssetUrl(item.url),
+    title: item.title,
+    description: item.description ?? null,
+    fileName: item.fileName ?? item.title,
+    contentType: item.contentType ?? null,
+    width: item.width ?? null,
+    height: item.height ?? null,
+  };
+}
+
+function mapFileAsset(item?: AssetItem): ContentfulFile | null {
+  if (!item?.sys?.id || !item.url || !item.title) {
+    return null;
+  }
+
+  return {
+    id: item.sys.id,
+    url: normalizeAssetUrl(item.url),
+    title: item.title,
+    description: item.description ?? null,
+    fileName: item.fileName ?? item.title,
     contentType: item.contentType ?? null,
   };
 }
