@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getContentfulDraftOptions, getResumePageData } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
 
@@ -52,7 +53,12 @@ export default async function ResumePage() {
                 Contact
               </dt>
               <dd className="mt-1 break-words font-semibold text-foreground">
-                {profile.email ?? "Add contact details in Contentful"}
+                <Link
+                  className="rounded-sm text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  href="/contact"
+                >
+                  Use the contact form
+                </Link>
               </dd>
             </div>
           </dl>

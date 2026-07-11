@@ -29,6 +29,11 @@ Create a local `.env.local` from `.env.example` and set:
 - `CONTENTFUL_PREVIEW_SECRET` (shared secret for Contentful draft preview URLs)
 - `CONTENTFUL_REVALIDATE_SECONDS` (defaults to `300`; use `false` to disable revalidation)
 - `CONTENTFUL_REVALIDATE_SECRET` (shared secret for the Contentful webhook)
+- `RESEND_API_KEY` (server-only API key for forwarding contact form submissions)
+- `CONTACT_TO_EMAIL` (server-only destination for contact form submissions)
+- `CONTACT_FROM_EMAIL` (verified Resend sender address used for outbound form mail)
+- `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (optional public Cloudflare Turnstile site key)
+- `TURNSTILE_SECRET_KEY` (optional server-only Cloudflare Turnstile secret)
 
 ## Deploy on Netlify
 
@@ -42,6 +47,12 @@ Netlify settings live in `netlify.toml`:
 Set the Contentful variables above in Netlify project environment variables. Set `NEXT_PUBLIC_SITE_URL` to the production site URL so canonical links, `/robots.txt`, `/sitemap.xml`, and social metadata use the final domain.
 If your Contentful environment is `master`, you can leave `CONTENTFUL_ENVIRONMENT` unset because the app uses that default.
 Do not mark `NEXT_PUBLIC_SITE_URL`, `CONTENTFUL_SPACE_ID`, or `CONTENTFUL_ENVIRONMENT` as secret values; `netlify.toml` also omits those public configuration keys from Netlify secret scanning because they are expected in generated pages and server chunks.
+
+## Contact Form Delivery
+
+The `/contact` page posts to a server-side route at `/api/contact`, which forwards submissions with Resend. The recipient email is never rendered in the browser; configure it only through `CONTACT_TO_EMAIL` in local and Netlify environment variables.
+
+The contact route accepts one optional attachment and only forwards PDF or DOCX files up to 8 MB. It also includes a hidden honeypot field, rejects unrealistically fast submissions, applies basic in-memory per-IP rate limiting, and can verify Cloudflare Turnstile when `TURNSTILE_SECRET_KEY` and `NEXT_PUBLIC_TURNSTILE_SITE_KEY` are configured.
 
 ## Contentful Revalidation Webhook
 

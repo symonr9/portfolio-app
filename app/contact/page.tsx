@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ContactForm } from "@/app/contact/contact-form";
 import { getContactPageData, getContentfulDraftOptions } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
 
@@ -12,8 +13,8 @@ export const metadata: Metadata = buildPageMetadata({
 export default async function ContactPage() {
   const contentfulOptions = await getContentfulDraftOptions();
   const { contactCta, profile } = await getContactPageData(contentfulOptions);
+  const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const contactItems: [string, string | null | undefined][] = [
-    ["Email", profile.email],
     ["Location", profile.location],
     ["Profile", profile.name],
   ];
@@ -33,39 +34,26 @@ export default async function ContactPage() {
         </p>
       </div>
 
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
-        {contactItems.map(([item, value]) => (
-          <article
-            className="rounded-sm border border-foreground/10 bg-surface p-6"
-            key={item}
-          >
-            <h2 className="break-words text-xl font-semibold">{item}</h2>
-            <ContactValue label={item} value={value} />
-          </article>
-        ))}
+      <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
+        <ContactForm turnstileSiteKey={turnstileSiteKey} />
+
+        <div className="grid gap-4">
+          {contactItems.map(([item, value]) => (
+            <article
+              className="rounded-sm border border-foreground/10 bg-surface p-6"
+              key={item}
+            >
+              <h2 className="break-words text-xl font-semibold">{item}</h2>
+              <ContactValue value={value} />
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
-function ContactValue({
-  label,
-  value,
-}: {
-  label: string;
-  value?: string | null;
-}) {
-  if (label === "Email" && value) {
-    return (
-      <a
-        className="mt-3 inline-flex break-all rounded-sm leading-7 text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-        href={`mailto:${value}`}
-      >
-        {value}
-      </a>
-    );
-  }
-
+function ContactValue({ value }: { value?: string | null }) {
   return (
     <p className="mt-3 break-words leading-7 text-muted">
       {value ?? "Add this detail in Contentful."}
