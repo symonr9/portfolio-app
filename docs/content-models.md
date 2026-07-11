@@ -29,9 +29,11 @@ Fields:
 | --- | --- | --- | --- | --- |
 | Name | `name` | Short text | Yes | Public display name. |
 | Headline | `headline` | Short text | Yes | Brief positioning statement. Keep profession-agnostic in structure. |
+| Small Headline | `smallHeadline` | Short text | No | Compact profile line for constrained surfaces such as the global navbar. |
 | Short bio | `shortBio` | Long text | Yes | Concise summary for home and preview sections. |
 | Long bio | `longBio` | Rich text | No | Full about-page biography. |
 | Portrait | `portrait` | Media | No | Image asset. |
+| Avatar | `avatar` | Media | No | Compact profile image for the global navbar and other small identity surfaces. |
 | Email | `email` | Short text | No | Contact email. Validate as email. |
 | Location | `location` | Short text | No | City, region, or remote-friendly phrase. |
 | Resume PDF | `resumePdf` | Media | No | PDF asset for download. |
@@ -43,8 +45,10 @@ Fields:
 Recommended validations:
 
 - Limit `headline` to 160 characters.
+- Limit `smallHeadline` to 80 characters.
 - Validate `email` as email.
 - Restrict `portrait` to image file types.
+- Restrict `avatar` to image file types.
 - Restrict `resumePdf` to PDF.
 
 ### Work Sample

@@ -1,13 +1,18 @@
 import Link from "next/link";
 import type { Profile } from "@/lib/contentful";
+import { ContentfulImage } from "./contentful-image";
 import { DraftPreviewBanner } from "./draft-preview-banner";
 import { NavLinks } from "./nav-links";
 
 export function SiteShell({
   children,
   profile,
-}: Readonly<{ children: React.ReactNode; profile: Pick<Profile, "headline" | "name"> }>) {
+}: Readonly<{
+  children: React.ReactNode;
+  profile: Pick<Profile, "avatar" | "headline" | "name" | "smallHeadline">;
+}>) {
   const profileInitial = profile.name.trim().charAt(0).toUpperCase();
+  const navHeadline = profile.smallHeadline ?? profile.headline;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -25,12 +30,20 @@ export function SiteShell({
             className="group inline-flex min-w-0 max-w-full items-center gap-2.5 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:max-w-[44%] lg:max-w-[46%]"
             aria-label="Portfolio home"
           >
-            <span className="grid size-8 shrink-0 place-items-center rounded-sm border border-foreground/15 bg-foreground text-xs font-semibold text-background shadow-sm transition-transform group-hover:-translate-y-0.5">
-              {profileInitial}
-            </span>
+            {profile.avatar ? (
+              <ContentfulImage
+                className="size-8 shrink-0 rounded-sm border border-foreground/15 object-cover shadow-sm transition-transform group-hover:-translate-y-0.5"
+                image={profile.avatar}
+                sizes="32px"
+              />
+            ) : (
+              <span className="grid size-8 shrink-0 place-items-center rounded-sm border border-foreground/15 bg-foreground text-xs font-semibold text-background shadow-sm transition-transform group-hover:-translate-y-0.5">
+                {profileInitial}
+              </span>
+            )}
             <span className="flex min-w-0 flex-col leading-tight">
               <span className="truncate text-sm font-semibold">{profile.name}</span>
-              <span className="truncate text-xs text-muted">{profile.headline}</span>
+              <span className="truncate text-xs text-muted">{navHeadline}</span>
             </span>
           </Link>
 

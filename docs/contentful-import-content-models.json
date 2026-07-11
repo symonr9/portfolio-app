@@ -36,6 +36,22 @@
           "omitted": false
         },
         {
+          "id": "smallHeadline",
+          "name": "Small Headline",
+          "type": "Symbol",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "size": {
+                "max": 80
+              }
+            }
+          ],
+          "disabled": false,
+          "omitted": false
+        },
+        {
           "id": "shortBio",
           "name": "Short bio",
           "type": "Text",
@@ -58,6 +74,23 @@
         {
           "id": "portrait",
           "name": "Portrait",
+          "type": "Link",
+          "localized": false,
+          "required": false,
+          "validations": [
+            {
+              "linkMimetypeGroup": [
+                "image"
+              ]
+            }
+          ],
+          "disabled": false,
+          "omitted": false,
+          "linkType": "Asset"
+        },
+        {
+          "id": "avatar",
+          "name": "Avatar",
           "type": "Link",
           "localized": false,
           "required": false,

@@ -134,9 +134,11 @@ export interface NavigationItem {
 export interface ProfileFields {
   name: string;
   headline: string;
+  smallHeadline?: string;
   shortBio: string;
   longBio?: RichTextDocument;
   portrait?: ContentfulAssetReference;
+  avatar?: ContentfulAssetReference;
   email?: string;
   location?: string;
   resumePdf?: ContentfulAssetReference;

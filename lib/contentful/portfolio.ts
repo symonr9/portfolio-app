@@ -45,11 +45,13 @@ export type RichTextDocument = {
 export type Profile = {
   name: string;
   headline: string;
+  smallHeadline: string | null;
   shortBio: string;
   longBio: RichTextDocument | null;
   email: string | null;
   location: string | null;
   portrait: ContentfulImage | null;
+  avatar: ContentfulImage | null;
 };
 
 export type WorkSample = {
@@ -167,9 +169,11 @@ type BlogPostItem = {
 type ProfileItem = {
   name?: string | null;
   headline?: string | null;
+  smallHeadline?: string | null;
   shortBio?: string | null;
   longBio?: RichTextField;
   portrait?: AssetItem;
+  avatar?: AssetItem;
   email?: string | null;
   location?: string | null;
 } | null;
@@ -215,6 +219,24 @@ const RICH_TEXT_FIELDS = `
       }
     }
   }
+`;
+
+const PROFILE_FIELDS = `
+  name
+  headline
+  smallHeadline
+  shortBio
+  longBio {
+    ${RICH_TEXT_FIELDS}
+  }
+  portrait {
+    ${ASSET_FIELDS}
+  }
+  avatar {
+    ${ASSET_FIELDS}
+  }
+  email
+  location
 `;
 
 const WORK_CARD_FIELDS = `
@@ -280,17 +302,7 @@ const HOME_QUERY = `
   query PortfolioHome($preview: Boolean!) {
     profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
-        name
-        headline
-        shortBio
-        longBio {
-          ${RICH_TEXT_FIELDS}
-        }
-        portrait {
-          ${ASSET_FIELDS}
-        }
-        email
-        location
+        ${PROFILE_FIELDS}
       }
     }
     workSampleCollection(
@@ -320,17 +332,7 @@ const PROFILE_QUERY = `
   query PortfolioProfile($preview: Boolean!) {
     profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
-        name
-        headline
-        shortBio
-        longBio {
-          ${RICH_TEXT_FIELDS}
-        }
-        portrait {
-          ${ASSET_FIELDS}
-        }
-        email
-        location
+        ${PROFILE_FIELDS}
       }
     }
   }
@@ -387,17 +389,7 @@ const ABOUT_QUERY = `
   query PortfolioAbout($preview: Boolean!) {
     profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
-        name
-        headline
-        shortBio
-        longBio {
-          ${RICH_TEXT_FIELDS}
-        }
-        portrait {
-          ${ASSET_FIELDS}
-        }
-        email
-        location
+        ${PROFILE_FIELDS}
       }
     }
     experienceCollection(limit: 2, order: [sortOrder_ASC, startDate_DESC], preview: $preview) {
@@ -425,17 +417,7 @@ const RESUME_QUERY = `
   query PortfolioResume($preview: Boolean!) {
     profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
-        name
-        headline
-        shortBio
-        longBio {
-          ${RICH_TEXT_FIELDS}
-        }
-        portrait {
-          ${ASSET_FIELDS}
-        }
-        email
-        location
+        ${PROFILE_FIELDS}
       }
     }
     experienceCollection(limit: 100, order: [sortOrder_ASC, startDate_DESC], preview: $preview) {
@@ -468,17 +450,7 @@ const CONTACT_QUERY = `
   query PortfolioContact($preview: Boolean!) {
     profileCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
-        name
-        headline
-        shortBio
-        longBio {
-          ${RICH_TEXT_FIELDS}
-        }
-        portrait {
-          ${ASSET_FIELDS}
-        }
-        email
-        location
+        ${PROFILE_FIELDS}
       }
     }
     siteSettingsCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
@@ -616,11 +588,13 @@ function firstProfile(items?: ProfileItem[] | null): Profile {
   return {
     name: item.name,
     headline: item.headline,
+    smallHeadline: item.smallHeadline ?? null,
     shortBio: item.shortBio,
     longBio,
     email: item.email ?? null,
     location: item.location ?? null,
     portrait: mapAsset(item.portrait),
+    avatar: mapAsset(item.avatar),
   };
 }
 
