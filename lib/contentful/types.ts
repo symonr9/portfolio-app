@@ -8,14 +8,11 @@ export type ContentfulContentType =
   | "siteSettings";
 
 export type WorkSampleType =
-  | "case-study"
-  | "project"
-  | "publication"
-  | "media"
-  | "presentation"
-  | "research"
-  | "event"
-  | "other";
+  | "publishing"
+  | "social-media"
+  | "writing"
+  | "photography"
+  | "art";
 
 export type ExperienceCategory =
   | "work"

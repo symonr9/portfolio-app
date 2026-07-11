@@ -254,14 +254,11 @@
           "validations": [
             {
               "in": [
-                "case-study",
-                "project",
-                "publication",
-                "media",
-                "presentation",
-                "research",
-                "event",
-                "other"
+                "publishing",
+                "social-media",
+                "writing",
+                "photography",
+                "art"
               ]
             }
           ],

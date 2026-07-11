@@ -88,7 +88,7 @@ Fields:
 Recommended validations:
 
 - Require unique `slug`.
-- Restrict `type` to a controlled list, such as `case-study`, `project`, `publication`, `media`, `presentation`, `research`, `event`, `other`.
+- Restrict `type` to a controlled list: `publishing`, `social-media`, `writing`, `photography`, and `art`.
 - Restrict `featuredImage` to image file types.
 - Validate URL fields as URLs.
 

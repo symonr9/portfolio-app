@@ -66,7 +66,7 @@ export function SiteShell({
               Connect
             </Link>
             <Link className="rounded-sm hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" href="/work">
-              Explore work
+              Explore portfolio
             </Link>
           </div>
         </div>

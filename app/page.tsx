@@ -33,7 +33,7 @@ export default async function Home() {
                 href="/work"
                 className="inline-flex h-12 items-center justify-center rounded-sm bg-white px-5 text-sm font-semibold text-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
-                View work
+                View portfolio
               </Link>
               <Link
                 href="/blog"

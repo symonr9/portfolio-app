@@ -59,7 +59,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
               className="inline-flex rounded-sm text-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               href="/work"
             >
-              Back to work
+              Back to portfolio
             </Link>
             <p className="mt-8 break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
               {sample.type} / {sample.publishDate}

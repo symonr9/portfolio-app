@@ -258,6 +258,13 @@ const WORK_CARD_FIELDS = `
   }
 `;
 
+const WORK_LIST_FIELDS = `
+  ${WORK_CARD_FIELDS}
+  body {
+    json
+  }
+`;
+
 const WORK_DETAIL_FIELDS = `
   ${WORK_CARD_FIELDS}
   galleryCollection(limit: 12, preview: $preview) {
@@ -342,7 +349,7 @@ const WORK_SAMPLES_QUERY = `
   query WorkSamples($preview: Boolean!) {
     workSampleCollection(limit: 100, order: [sortOrder_ASC, publishDate_DESC], preview: $preview) {
       items {
-        ${WORK_CARD_FIELDS}
+        ${WORK_LIST_FIELDS}
       }
     }
   }
