@@ -240,25 +240,25 @@ function PublishingScene({ active }: { active: boolean }) {
         className={`${styles.bookStack} ${styles.bookStackTab}`}
         imageClassName={styles.booksImage}
         sizes="140px"
-        src="/books.jpg"
+        src="/books.png"
       />
       <DecorativeImage
         className={`${styles.bookStack} ${styles.bookStackLeftHigh}`}
         imageClassName={styles.booksImage}
         sizes="160px"
-        src="/books.jpg"
+        src="/books.png"
       />
       <DecorativeImage
         className={`${styles.bookStack} ${styles.bookStackLeftLow}`}
         imageClassName={styles.booksImage}
         sizes="130px"
-        src="/books.jpg"
+        src="/books.png"
       />
       <DecorativeImage
         className={`${styles.bookStack} ${styles.bookStackRight} ${styles.mirrored}`}
         imageClassName={styles.booksImage}
         sizes="190px"
-        src="/books.jpg"
+        src="/books.png"
       />
     </div>
   );
