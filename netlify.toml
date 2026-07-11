@@ -5,6 +5,7 @@
 [build.environment]
   NODE_VERSION = "22"
   NETLIFY_NEXT_SKEW_PROTECTION = "true"
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SITE_URL,CONTENTFUL_SPACE_ID,CONTENTFUL_ENVIRONMENT"
 
 [[headers]]
   for = "/_next/static/*"

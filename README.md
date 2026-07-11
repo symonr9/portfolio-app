@@ -23,7 +23,7 @@ Create a local `.env.local` from `.env.example` and set:
 
 - `NEXT_PUBLIC_SITE_URL` (production canonical URL, for metadata, robots, and sitemap)
 - `CONTENTFUL_SPACE_ID`
-- `CONTENTFUL_ENVIRONMENT` (defaults to `master`)
+- `CONTENTFUL_ENVIRONMENT` (optional; defaults to `master`)
 - `CONTENTFUL_ACCESS_TOKEN`
 - `CONTENTFUL_PREVIEW_ACCESS_TOKEN` (optional, for preview mode)
 - `CONTENTFUL_PREVIEW_SECRET` (shared secret for Contentful draft preview URLs)
@@ -40,6 +40,8 @@ Netlify settings live in `netlify.toml`:
 - Skew protection: `NETLIFY_NEXT_SKEW_PROTECTION=true`
 
 Set the Contentful variables above in Netlify project environment variables. Set `NEXT_PUBLIC_SITE_URL` to the production site URL so canonical links, `/robots.txt`, `/sitemap.xml`, and social metadata use the final domain.
+If your Contentful environment is `master`, you can leave `CONTENTFUL_ENVIRONMENT` unset because the app uses that default.
+Do not mark `NEXT_PUBLIC_SITE_URL`, `CONTENTFUL_SPACE_ID`, or `CONTENTFUL_ENVIRONMENT` as secret values; `netlify.toml` also omits those public configuration keys from Netlify secret scanning because they are expected in generated pages and server chunks.
 
 ## Contentful Revalidation Webhook
 
