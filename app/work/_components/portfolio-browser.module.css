@@ -121,13 +121,13 @@
 @keyframes stringLightGlow {
   0%,
   100% {
-    filter: drop-shadow(0 0 0.2rem rgb(255 236 170 / 20%));
+    filter: drop-shadow(0 0 0.2rem var(--glow-soft));
   }
 
   50% {
     filter:
-      drop-shadow(0 0 0.65rem rgb(255 230 140 / 62%))
-      drop-shadow(0 0 1.3rem rgb(255 224 112 / 28%));
+      drop-shadow(0 0 0.65rem var(--glow-strong))
+      drop-shadow(0 0 1.3rem var(--glow-halo));
   }
 }
 

@@ -31,7 +31,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
           Blog
         </p>
         <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
@@ -70,7 +70,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             </div>
             <div className="md:text-right">
               <Link
-                className="inline-flex rounded-sm text-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="inline-flex rounded-sm text-sm font-semibold text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 href={`/blog/${post.slug}`}
               >
                 Read post

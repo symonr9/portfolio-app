@@ -72,13 +72,13 @@ function renderNode(
       );
     case "unordered-list":
       return (
-        <ul className="list-disc space-y-2 pl-6 text-muted marker:text-accent" key={key}>
+        <ul className="list-disc space-y-2 pl-6 text-muted marker:text-accent-text" key={key}>
           {children}
         </ul>
       );
     case "ordered-list":
       return (
-        <ol className="list-decimal space-y-2 pl-6 text-muted marker:text-accent" key={key}>
+        <ol className="list-decimal space-y-2 pl-6 text-muted marker:text-accent-text" key={key}>
           {children}
         </ol>
       );
@@ -125,7 +125,7 @@ function InlineLink({
 }) {
   const isInternal = href.startsWith("/");
   const className =
-    "break-words rounded-sm font-semibold text-accent underline hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+    "break-words rounded-sm font-semibold text-accent-text underline hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
   return isInternal ? (
     <Link className={className} href={href}>
@@ -169,7 +169,7 @@ function renderEmbeddedAsset(
 
   return (
     <a
-      className="inline-flex break-words rounded-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      className="inline-flex break-words rounded-sm font-semibold text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       href={asset.url}
       key={key}
       rel="noreferrer"

@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { defaultDescription, siteName } from "@/lib/site";
+import { colorScheme } from "@/lib/theme";
 
 export const alt = "Portfolio site preview";
 export const contentType = "image/png";
@@ -14,8 +15,8 @@ export default function Image() {
       <div
         style={{
           alignItems: "stretch",
-          background: "#f7f4ee",
-          color: "#1f2937",
+          background: colorScheme.background,
+          color: colorScheme.foreground,
           display: "flex",
           height: "100%",
           padding: 72,
@@ -24,7 +25,7 @@ export default function Image() {
       >
         <div
           style={{
-            border: "2px solid rgba(31, 41, 55, 0.16)",
+            border: `2px solid ${colorScheme.borderStrong}`,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
@@ -34,7 +35,7 @@ export default function Image() {
         >
           <div
             style={{
-              color: "#315f72",
+              color: colorScheme.accentText,
               fontSize: 28,
               fontWeight: 700,
               letterSpacing: 4,
@@ -56,7 +57,7 @@ export default function Image() {
             </div>
             <div
               style={{
-                color: "#5f6b7a",
+                color: colorScheme.muted,
                 fontSize: 34,
                 lineHeight: 1.35,
                 maxWidth: 900,

@@ -19,25 +19,25 @@ export default async function Home() {
           sizes="100vw"
           className="-z-20 object-cover"
         />
-        <div className="absolute inset-0 -z-10 bg-black/62" />
+        <div className="absolute inset-0 -z-10 bg-hero-overlay/62" />
         <div className="mx-auto flex min-h-[calc(78vh-73px)] w-full max-w-6xl items-center px-5 py-20 sm:min-h-[560px] sm:py-24 lg:px-8">
           <div className="max-w-4xl">
-            <p className="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-white/75">
+            <p className="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-foreground-light/75">
               {profile.name}
             </p>
-            <h1 className="break-words text-2xl font-semibold leading-snug text-white sm:text-3xl">
+            <h1 className="break-words text-2xl font-semibold leading-snug text-foreground-light sm:text-3xl">
               {profile.headline}
             </h1>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/work"
-                className="inline-flex h-12 items-center justify-center rounded-sm bg-white px-5 text-sm font-semibold text-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="inline-flex h-12 items-center justify-center rounded-sm bg-foreground-light px-5 text-sm font-semibold text-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 View portfolio
               </Link>
               <Link
                 href="/blog"
-                className="inline-flex h-12 items-center justify-center rounded-sm border border-white/55 px-5 text-sm font-semibold text-white transition-colors hover:bg-white/12 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="inline-flex h-12 items-center justify-center rounded-sm border border-foreground-light/55 px-5 text-sm font-semibold text-foreground-light transition-colors hover:bg-foreground-light/12 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 Read blog
               </Link>
@@ -53,7 +53,7 @@ export default async function Home() {
           </p>
           {profile.avatar ? (
             <ContentfulImage
-              className="size-36 shrink-0 rounded-sm border border-foreground/10 object-cover shadow-[0_18px_60px_rgba(31,41,55,0.08)] sm:size-40 lg:size-44"
+              className="size-36 shrink-0 rounded-sm border border-foreground/10 object-cover shadow-[0_18px_60px_var(--shadow-soft)] sm:size-40 lg:size-44"
               image={profile.avatar}
               sizes="(min-width: 1024px) 176px, (min-width: 640px) 160px, 144px"
             />
@@ -64,7 +64,7 @@ export default async function Home() {
       <section className="mx-auto grid w-full max-w-6xl gap-4 px-5 py-16 lg:grid-cols-3 lg:px-8">
         {featuredWork.map((sample, index) => (
           <Link
-            className="group rounded-sm border border-foreground/10 bg-background/72 p-5 shadow-[0_18px_60px_rgba(31,41,55,0.08)] backdrop-blur transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+            className="group rounded-sm border border-foreground/10 bg-background/72 p-5 shadow-[0_18px_60px_var(--shadow-soft)] backdrop-blur transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
             href={`/work/${sample.slug}`}
             key={sample.slug}
           >
@@ -84,7 +84,7 @@ export default async function Home() {
               <MediaPlaceholder className="mb-5 aspect-[16/9] rounded-sm" />
             )}
             <p className="leading-7 text-muted">{sample.summary}</p>
-            <span className="mt-4 inline-flex text-sm font-semibold text-accent group-hover:text-foreground group-focus-visible:text-foreground">
+            <span className="mt-4 inline-flex text-sm font-semibold text-accent-text group-hover:text-foreground group-focus-visible:text-foreground">
               View detail
             </span>
           </Link>
@@ -93,7 +93,7 @@ export default async function Home() {
 
       <section className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.72fr_1fr] lg:px-8">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
             Featured expertise
           </p>
           <h2 className="mt-4 break-words text-3xl font-semibold">
@@ -119,7 +119,7 @@ export default async function Home() {
               <h3 className="mt-3 break-words text-2xl font-semibold">{post.title}</h3>
               <p className="mt-3 leading-7 text-muted">{post.excerpt}</p>
               <Link
-                className="mt-4 inline-flex rounded-sm text-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                className="mt-4 inline-flex rounded-sm text-sm font-semibold text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 href={`/blog/${post.slug}`}
               >
                 Read post

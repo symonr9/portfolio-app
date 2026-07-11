@@ -20,7 +20,7 @@ export default async function AboutPage() {
     <div>
       <section className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.78fr_1fr] lg:px-8">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
             About
           </p>
           <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">

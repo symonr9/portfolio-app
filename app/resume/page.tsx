@@ -19,7 +19,7 @@ export default async function ResumePage() {
       <div className="border-b border-foreground/10 pb-12">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div className="max-w-4xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
               Resume
             </p>
             <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">

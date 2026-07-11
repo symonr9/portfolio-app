@@ -17,7 +17,7 @@ export default async function WorkPage() {
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
           Portfolio
         </p>
         <p className="mt-5 text-lg leading-8 text-muted">

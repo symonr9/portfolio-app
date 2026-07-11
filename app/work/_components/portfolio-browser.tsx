@@ -63,7 +63,7 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
       <div className="relative z-10">
         <div
           aria-label="Portfolio categories"
-          className="relative grid rounded-sm border border-foreground/10 bg-surface p-1 shadow-[0_18px_60px_rgba(31,41,55,0.06)] sm:grid-cols-5"
+          className="relative grid rounded-sm border border-foreground/10 bg-surface p-1 shadow-[0_18px_60px_var(--shadow-subtle)] sm:grid-cols-5"
           role="tablist"
         >
           <span
@@ -357,7 +357,7 @@ function PortfolioSampleList({
                 </span>
               ))}
             </div>
-            <span className="mt-6 inline-flex text-sm font-semibold text-accent group-hover:text-foreground group-focus-visible:text-foreground">
+            <span className="mt-6 inline-flex text-sm font-semibold text-accent-text group-hover:text-foreground group-focus-visible:text-foreground">
               View detail
             </span>
           </Link>

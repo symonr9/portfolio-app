@@ -21,7 +21,7 @@ export default async function ContactPage() {
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
           Contact
         </p>
         <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
@@ -58,7 +58,7 @@ function ContactValue({
   if (label === "Email" && value) {
     return (
       <a
-        className="mt-3 inline-flex break-all rounded-sm leading-7 text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="mt-3 inline-flex break-all rounded-sm leading-7 text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         href={`mailto:${value}`}
       >
         {value}

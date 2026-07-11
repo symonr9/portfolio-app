@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import {
   defaultDescription,
@@ -7,6 +8,7 @@ import {
   siteName,
 } from "@/lib/site";
 import { getContentfulDraftOptions, getProfile } from "@/lib/contentful";
+import { themeCssVariables } from "@/lib/theme";
 import { SiteShell } from "./_components/site-shell";
 import "./globals.css";
 
@@ -58,7 +60,10 @@ export default async function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="min-h-full bg-background text-foreground">
+      <body
+        className="min-h-full bg-background text-foreground"
+        style={themeCssVariables as CSSProperties}
+      >
         <SiteShell profile={profile}>{children}</SiteShell>
       </body>
     </html>

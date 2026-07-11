@@ -56,7 +56,7 @@ export default async function BlogDetailPage({ params }: BlogDetailProps) {
       <header className="border-b border-foreground/10">
         <div className="mx-auto w-full max-w-3xl px-5 py-16 lg:px-8">
           <Link
-            className="inline-flex rounded-sm text-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="inline-flex rounded-sm text-sm font-semibold text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             href="/blog"
           >
             Back to blog
@@ -100,7 +100,7 @@ export default async function BlogDetailPage({ params }: BlogDetailProps) {
           <div className="mt-4 space-y-4">
             {relatedWork.map((sample) => (
               <Link
-                className="block rounded-sm border-t border-foreground/10 pt-4 hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                className="block rounded-sm border-t border-foreground/10 pt-4 hover:text-accent-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
                 href={`/work/${sample.slug}`}
                 key={sample.slug}
               >

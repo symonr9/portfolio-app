@@ -14,7 +14,7 @@ export default function WritingPage() {
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
       <div className="max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
           Writing
         </p>
         <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">

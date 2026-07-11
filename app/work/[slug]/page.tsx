@@ -57,7 +57,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
         <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.92fr_0.58fr] lg:px-8">
           <div>
             <Link
-              className="inline-flex rounded-sm text-sm font-semibold text-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="inline-flex rounded-sm text-sm font-semibold text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               href="/work"
             >
               Back to portfolio
