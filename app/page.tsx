@@ -1,13 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getContentfulDraftOptions, getHomePageData } from "@/lib/contentful";
-import { formatDate } from "@/lib/format-date";
 import { ContentfulImage, MediaPlaceholder } from "./_components/contentful-image";
 
 export default async function Home() {
   const contentfulOptions = await getContentfulDraftOptions();
-  const { expertiseTags, featuredPosts, featuredWork, profile } =
-    await getHomePageData(contentfulOptions);
+  const { featuredWork, profile } = await getHomePageData(contentfulOptions);
 
   return (
     <div>
@@ -37,10 +35,10 @@ export default async function Home() {
                 View portfolio
               </Link>
               <Link
-                href="/blog"
+                href="/contact"
                 className="inline-flex h-12 items-center justify-center rounded-sm border border-foreground-light/55 px-5 text-sm font-semibold text-foreground-light transition-colors hover:bg-foreground-light/12 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
-                Read blog
+                Contact me
               </Link>
             </div>
           </div>
@@ -62,73 +60,47 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto grid w-full max-w-6xl gap-4 px-5 py-16 lg:grid-cols-3 lg:px-8">
-        {featuredWork.map((sample, index) => (
-          <Link
-            className="group rounded-sm border border-foreground/10 bg-background/22 p-5 shadow-[0_18px_60px_var(--shadow-soft)] backdrop-blur transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
-            href={`/work/${sample.slug}`}
-            key={sample.slug}
-          >
-            <div className="mb-6 flex items-center justify-between">
-              <span className="break-words text-sm font-semibold">{sample.title}</span>
-              <span className="font-mono text-xs text-muted">
-                0{index + 1}
-              </span>
-            </div>
-            {sample.featuredImage ? (
-              <ContentfulImage
-                className="mb-5 aspect-[16/9] w-full rounded-sm object-cover"
-                image={sample.featuredImage}
-                sizes="(min-width: 1024px) 33vw, 100vw"
-              />
-            ) : (
-              <MediaPlaceholder className="mb-5 aspect-[16/9] rounded-sm" />
-            )}
-            <p className="leading-7 text-muted">{sample.summary}</p>
-            <span className="mt-4 inline-flex text-sm font-semibold text-accent-text group-hover:text-foreground group-focus-visible:text-foreground">
-              View detail
-            </span>
-          </Link>
-        ))}
-      </section>
-
-      <section className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.72fr_1fr] lg:px-8">
-        <div>
+      {featuredWork.length > 0 ? (
+        <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
-            Featured expertise
+            Featured work
           </p>
           <h2 className="mt-4 break-words text-3xl font-semibold">
-            Editable content across the core portfolio surfaces.
+            Selected work
           </h2>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {expertiseTags.map((tag) => (
-              <span
-                className="rounded-sm border border-foreground/10 bg-surface px-3 py-2 text-sm text-muted"
-                key={tag.slug}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {featuredWork.map((sample, index) => (
+              <Link
+                className="group rounded-sm border border-foreground/10 bg-background/22 p-5 shadow-[0_18px_60px_var(--shadow-soft)] backdrop-blur transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+                href={`/work/${sample.slug}`}
+                key={sample.slug}
               >
-                {tag.name}
-              </span>
+                <div className="mb-6 flex items-center justify-between">
+                  <span className="break-words text-sm font-semibold">
+                    {sample.title}
+                  </span>
+                  <span className="font-mono text-xs text-muted">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                {sample.featuredImage ? (
+                  <ContentfulImage
+                    className="mb-5 aspect-[16/9] w-full rounded-sm object-cover"
+                    image={sample.featuredImage}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                ) : (
+                  <MediaPlaceholder className="mb-5 aspect-[16/9] rounded-sm" />
+                )}
+                <p className="leading-7 text-muted">{sample.summary}</p>
+                <span className="mt-4 inline-flex text-sm font-semibold text-accent-text group-hover:text-foreground group-focus-visible:text-foreground">
+                  View detail
+                </span>
+              </Link>
             ))}
           </div>
-        </div>
-        <div className="divide-y divide-foreground/10 border-y border-foreground/10">
-          {featuredPosts.map((post) => (
-            <article className="py-6" key={post.slug}>
-              <p className="break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
-                {formatDate(post.publishDate)} / {post.readingTime}
-              </p>
-              <h3 className="mt-3 break-words text-2xl font-semibold">{post.title}</h3>
-              <p className="mt-3 leading-7 text-muted">{post.excerpt}</p>
-              <Link
-                className="mt-4 inline-flex rounded-sm text-sm font-semibold text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                href={`/blog/${post.slug}`}
-              >
-                Read post
-              </Link>
-            </article>
-          ))}
-        </div>
-      </section>
+        </section>
+      ) : null}
     </div>
   );
 }

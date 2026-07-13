@@ -6,6 +6,11 @@ export type Tag = {
   slug: string;
 };
 
+export type SocialLink = {
+  label: string;
+  url: string;
+};
+
 export type ContentfulImage = {
   id: string;
   url: string;
@@ -73,6 +78,7 @@ export type Profile = {
   portrait: ContentfulImage | null;
   avatar: ContentfulImage | null;
   resumePdf: ContentfulFile | null;
+  socialLinks: SocialLink[];
 };
 
 export type WorkSample = {
@@ -197,8 +203,15 @@ type ProfileItem = {
   portrait?: AssetItem;
   avatar?: AssetItem;
   resumePdf?: AssetItem;
+  socialLinks?: unknown;
   email?: string | null;
   location?: string | null;
+} | null;
+
+type SiteSettingsItem = {
+  homepageFeaturedWorkCollection?: {
+    items?: WorkSampleItem[] | null;
+  } | null;
 } | null;
 
 type ExperienceItem = {
@@ -262,6 +275,7 @@ const PROFILE_FIELDS = `
   resumePdf {
     ${ASSET_FIELDS}
   }
+  socialLinks
   email
   location
 `;
@@ -339,24 +353,13 @@ const HOME_QUERY = `
         ${PROFILE_FIELDS}
       }
     }
-    workSampleCollection(
-      limit: 3
-      order: [sortOrder_ASC, publishDate_DESC]
-      where: { featured: true }
-      preview: $preview
-    ) {
+    siteSettingsCollection(limit: 1, order: sys_publishedAt_DESC, preview: $preview) {
       items {
-        ${WORK_CARD_FIELDS}
-      }
-    }
-    blogPostCollection(limit: 2, order: publishDate_DESC, preview: $preview) {
-      items {
-        ${BLOG_CARD_FIELDS}
-      }
-    }
-    expertiseTagCollection(limit: 12, order: [sortOrder_ASC, name_ASC], preview: $preview) {
-      items {
-        ${TAG_FIELDS}
+        homepageFeaturedWorkCollection(limit: 100, preview: $preview) {
+          items {
+            ${WORK_CARD_FIELDS}
+          }
+        }
       }
     }
   }
@@ -498,16 +501,16 @@ const CONTACT_QUERY = `
 export async function getHomePageData(options?: ContentfulRequestOptions) {
   const data = await contentfulGraphQLFetch<{
     profileCollection?: { items?: ProfileItem[] | null } | null;
-    workSampleCollection?: { items?: WorkSampleItem[] | null } | null;
-    blogPostCollection?: { items?: BlogPostItem[] | null } | null;
-    expertiseTagCollection?: { items?: TagItem[] | null } | null;
+    siteSettingsCollection?: { items?: SiteSettingsItem[] | null } | null;
   }>(HOME_QUERY, {}, options);
+
+  const siteSettings = data.siteSettingsCollection?.items?.find(Boolean);
 
   return {
     profile: firstProfile(data.profileCollection?.items),
-    featuredWork: mapWorkSamples(data.workSampleCollection?.items),
-    featuredPosts: mapBlogPosts(data.blogPostCollection?.items),
-    expertiseTags: mapTags(data.expertiseTagCollection?.items),
+    featuredWork: mapWorkSamples(
+      siteSettings?.homepageFeaturedWorkCollection?.items,
+    ),
   };
 }
 
@@ -630,7 +633,45 @@ function firstProfile(items?: ProfileItem[] | null): Profile {
     portrait: mapAsset(item.portrait),
     avatar: mapAsset(item.avatar),
     resumePdf: mapFileAsset(item.resumePdf),
+    socialLinks: mapSocialLinks(item.socialLinks),
   };
+}
+
+function mapSocialLinks(value: unknown): SocialLink[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== "object") {
+      return [];
+    }
+
+    const { label, url } = item as Record<string, unknown>;
+
+    if (typeof label !== "string" || typeof url !== "string") {
+      return [];
+    }
+
+    const normalizedLabel = label.trim();
+    const normalizedUrl = url.trim();
+
+    if (!normalizedLabel || !normalizedUrl) {
+      return [];
+    }
+
+    try {
+      const protocol = new URL(normalizedUrl).protocol;
+
+      if (protocol !== "http:" && protocol !== "https:") {
+        return [];
+      }
+    } catch {
+      return [];
+    }
+
+    return [{ label: normalizedLabel, url: normalizedUrl }];
+  });
 }
 
 function mapWorkSamples(items?: WorkSampleItem[] | null): WorkSample[] {
