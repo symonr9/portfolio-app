@@ -34,10 +34,10 @@ export default async function ContactPage() {
         </p>
       </div>
 
-      <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
+      <div className="mt-10 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
         <ContactForm turnstileSiteKey={turnstileSiteKey} />
 
-        <div className="grid gap-4">
+        <div className="grid min-w-0 gap-4">
           {contactItems.map(([item, value]) => (
             <article
               className="rounded-sm border border-foreground/10 bg-surface p-6"

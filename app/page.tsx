@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getContentfulDraftOptions, getHomePageData } from "@/lib/contentful";
+import { formatDate } from "@/lib/format-date";
 import { ContentfulImage, MediaPlaceholder } from "./_components/contentful-image";
 
 export default async function Home() {
@@ -114,7 +115,7 @@ export default async function Home() {
           {featuredPosts.map((post) => (
             <article className="py-6" key={post.slug}>
               <p className="break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
-                {post.publishDate} / {post.readingTime}
+                {formatDate(post.publishDate)} / {post.readingTime}
               </p>
               <h3 className="mt-3 break-words text-2xl font-semibold">{post.title}</h3>
               <p className="mt-3 leading-7 text-muted">{post.excerpt}</p>

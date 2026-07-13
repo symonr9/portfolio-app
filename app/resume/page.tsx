@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getContentfulDraftOptions, getResumePageData } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
+import { formatMonthYear } from "@/lib/format-date";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Resume",
@@ -141,9 +142,13 @@ function formatExperienceDate(
   startDate: string | null,
   endDate: string | null,
 ) {
-  if (startDate && endDate) {
-    return `${startDate} - ${endDate}`;
+  const formattedStartDate = formatMonthYear(startDate);
+  const formattedEndDate =
+    endDate === "Present" ? endDate : formatMonthYear(endDate);
+
+  if (formattedStartDate && formattedEndDate) {
+    return `${formattedStartDate} - ${formattedEndDate}`;
   }
 
-  return startDate ?? endDate ?? "Date unavailable";
+  return formattedStartDate ?? formattedEndDate ?? "Date unavailable";
 }

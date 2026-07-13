@@ -60,7 +60,7 @@ export function ContactForm({ turnstileSiteKey }: ContactFormProps) {
 
   return (
     <form
-      className="grid gap-5 rounded-sm border border-foreground/10 bg-surface p-5 shadow-[0_18px_60px_var(--shadow-soft)] sm:p-6"
+      className="grid min-w-0 gap-5 rounded-sm border border-foreground/10 bg-surface p-5 shadow-[0_18px_60px_var(--shadow-soft)] sm:p-6"
       encType="multipart/form-data"
       onSubmit={handleSubmit}
     >
@@ -83,7 +83,7 @@ export function ContactForm({ turnstileSiteKey }: ContactFormProps) {
           From email
           <input
             autoComplete="email"
-            className="min-h-12 rounded-sm border border-foreground/15 bg-background px-3 text-base font-normal text-foreground outline-none transition-colors focus:border-accent"
+            className="min-h-12 min-w-0 w-full rounded-sm border border-foreground/15 bg-background px-3 text-base font-normal text-foreground outline-none transition-colors focus:border-accent"
             id="fromEmail"
             maxLength={254}
             name="fromEmail"
@@ -95,7 +95,7 @@ export function ContactForm({ turnstileSiteKey }: ContactFormProps) {
           Phone <span className="font-normal text-muted">(optional)</span>
           <input
             autoComplete="tel"
-            className="min-h-12 rounded-sm border border-foreground/15 bg-background px-3 text-base font-normal text-foreground outline-none transition-colors focus:border-accent"
+            className="min-h-12 min-w-0 w-full rounded-sm border border-foreground/15 bg-background px-3 text-base font-normal text-foreground outline-none transition-colors focus:border-accent"
             id="phone"
             maxLength={40}
             name="phone"
@@ -107,7 +107,7 @@ export function ContactForm({ turnstileSiteKey }: ContactFormProps) {
       <label className="grid gap-2 text-sm font-semibold" htmlFor="subject">
         Subject
         <input
-          className="min-h-12 rounded-sm border border-foreground/15 bg-background px-3 text-base font-normal text-foreground outline-none transition-colors focus:border-accent"
+          className="min-h-12 min-w-0 w-full rounded-sm border border-foreground/15 bg-background px-3 text-base font-normal text-foreground outline-none transition-colors focus:border-accent"
           id="subject"
           maxLength={120}
           name="subject"
@@ -119,7 +119,7 @@ export function ContactForm({ turnstileSiteKey }: ContactFormProps) {
       <label className="grid gap-2 text-sm font-semibold" htmlFor="message">
         Message
         <textarea
-          className="min-h-44 resize-y rounded-sm border border-foreground/15 bg-background px-3 py-3 text-base font-normal leading-7 text-foreground outline-none transition-colors focus:border-accent"
+          className="min-h-44 min-w-0 w-full resize-y rounded-sm border border-foreground/15 bg-background px-3 py-3 text-base font-normal leading-7 text-foreground outline-none transition-colors focus:border-accent"
           id="message"
           maxLength={5000}
           name="message"
@@ -131,7 +131,7 @@ export function ContactForm({ turnstileSiteKey }: ContactFormProps) {
         Attachment <span className="font-normal text-muted">(PDF or DOCX only)</span>
         <input
           accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-          className="min-h-12 rounded-sm border border-foreground/15 bg-background px-3 py-2 text-sm font-normal text-foreground file:mr-4 file:rounded-sm file:border-0 file:bg-foreground file:px-3 file:py-2 file:text-sm file:font-semibold file:text-background"
+          className="min-h-12 min-w-0 w-full rounded-sm border border-foreground/15 bg-background px-3 py-2 text-sm font-normal text-foreground file:mr-4 file:rounded-sm file:border-0 file:bg-foreground file:px-3 file:py-2 file:text-sm file:font-semibold file:text-background"
           id="attachment"
           name="attachment"
           type="file"

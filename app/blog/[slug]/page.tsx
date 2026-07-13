@@ -7,6 +7,7 @@ import {
   getContentfulDraftOptions,
 } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
+import { formatDate } from "@/lib/format-date";
 import { ContentfulImage } from "../../_components/contentful-image";
 import { RichTextRenderer } from "../../_components/rich-text-renderer";
 
@@ -62,7 +63,7 @@ export default async function BlogDetailPage({ params }: BlogDetailProps) {
             Back to blog
           </Link>
           <p className="mt-8 break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
-            {post.publishDate} / {post.readingTime}
+            {formatDate(post.publishDate)} / {post.readingTime}
           </p>
           <h1 className="mt-4 break-words text-4xl font-semibold leading-tight sm:text-6xl">
             {post.title}

@@ -7,6 +7,7 @@ import {
   getWorkSampleSlugParams,
 } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
+import { formatDate } from "@/lib/format-date";
 import { ContentfulImage, MediaPlaceholder } from "../../_components/contentful-image";
 import { MediaGallery } from "../../_components/media-gallery";
 import { MediaEmbed } from "../../_components/media-embed";
@@ -63,7 +64,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
               Back to portfolio
             </Link>
             <p className="mt-8 break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
-              {sample.type} / {sample.publishDate}
+              {sample.type} / {formatDate(sample.publishDate)}
             </p>
             <h1 className="mt-4 break-words text-4xl font-semibold leading-tight sm:text-6xl">
               {sample.title}
@@ -87,7 +88,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
               {[
                 ["Organization", sample.organization],
                 ["Role", sample.role],
-                ["Published", sample.publishDate],
+                ["Published", formatDate(sample.publishDate)],
               ]
                 .filter(([, value]) => Boolean(value))
                 .map(([label, value]) => (

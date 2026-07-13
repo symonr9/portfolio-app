@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getAboutPageData, getContentfulDraftOptions } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
+import { formatMonthYear } from "@/lib/format-date";
 import { ContentfulImage } from "../_components/contentful-image";
 import { RichTextRenderer } from "../_components/rich-text-renderer";
 
@@ -58,8 +59,10 @@ export default async function AboutPage() {
                 key={`${experience.title}-${experience.organization}`}
               >
                 <p className="break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
-                  {experience.startDate} -{" "}
-                  {experience.current ? "Present" : experience.endDate}
+                  {formatMonthYear(experience.startDate) ?? "Date unavailable"} -{" "}
+                  {experience.current
+                    ? "Present"
+                    : formatMonthYear(experience.endDate) ?? "Date unavailable"}
                 </p>
                 <h3 className="mt-3 break-words text-2xl font-semibold">
                   {experience.title}

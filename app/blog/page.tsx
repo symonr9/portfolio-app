@@ -5,6 +5,7 @@ import { buildPageMetadata } from "@/lib/site";
 import { ContentfulImage } from "../_components/contentful-image";
 import { TagFilterNav } from "../_components/tag-filter-nav";
 import type { BlogPost, Tag } from "@/lib/contentful";
+import { formatDate } from "@/lib/format-date";
 
 type BlogPageProps = {
   searchParams: Promise<{ tag?: string | string[] }>;
@@ -53,7 +54,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             <PostCover post={post} />
             <div>
               <p className="break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
-                {post.publishDate} / {post.readingTime}
+                {formatDate(post.publishDate)} / {post.readingTime}
               </p>
               <h2 className="mt-3 break-words text-2xl font-semibold">{post.title}</h2>
               <p className="mt-3 leading-7 text-muted">{post.excerpt}</p>
