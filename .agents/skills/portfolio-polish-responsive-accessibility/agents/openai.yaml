@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Responsive Accessibility"
+  short_description: "Polish responsive and accessible UI"
+  default_prompt: "Use $portfolio-polish-responsive-accessibility to audit and improve the affected portfolio interface."

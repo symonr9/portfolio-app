@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Media Presentation"
+  short_description: "Build robust portfolio media displays"
+  default_prompt: "Use $portfolio-media-presentation to present this portfolio media accessibly and responsively."

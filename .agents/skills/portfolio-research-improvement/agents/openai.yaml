@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Improvement Research"
+  short_description: "Research and prioritize portfolio improvements"
+  default_prompt: "Use $portfolio-research-improvement to research and prioritize improvements without implementing them."

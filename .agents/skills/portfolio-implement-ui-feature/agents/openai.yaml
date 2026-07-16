@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio UI Feature"
+  short_description: "Implement integrated portfolio UI features"
+  default_prompt: "Use $portfolio-implement-ui-feature to add a responsive, CMS-driven feature to the portfolio."

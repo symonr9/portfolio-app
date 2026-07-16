@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio UX Audit"
+  short_description: "Audit complete portfolio user workflows"
+  default_prompt: "Use $portfolio-audit-ux to test every portfolio workflow and report or fix confirmed issues."

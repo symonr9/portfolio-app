@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Finish Change"
+  short_description: "Verify and finalize portfolio changes"
+  default_prompt: "Use $portfolio-finish-change to verify the current portfolio changes and commit only if requested."

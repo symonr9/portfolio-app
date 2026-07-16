@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Netlify Release Audit"
+  short_description: "Audit Netlify production readiness"
+  default_prompt: "Use $portfolio-netlify-release-audit to assess and improve this portfolio release without changing dashboard settings."

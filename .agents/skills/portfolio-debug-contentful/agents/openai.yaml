@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Contentful Debugging"
+  short_description: "Diagnose Contentful integration failures"
+  default_prompt: "Use $portfolio-debug-contentful to find the root cause of this portfolio Contentful failure."

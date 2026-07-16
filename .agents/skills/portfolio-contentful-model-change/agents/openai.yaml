@@ -1,0 +1,4 @@
+interface:
+  display_name: "Portfolio Contentful Model Change"
+  short_description: "Change Contentful models end to end"
+  default_prompt: "Use $portfolio-contentful-model-change to add or modify a portfolio Contentful field end to end."
