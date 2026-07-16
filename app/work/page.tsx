@@ -20,9 +20,9 @@ export default async function WorkPage() {
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
           Portfolio
         </p>
-        <p className="mt-5 text-lg leading-8 text-muted">
+        <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
           Take a look at my stuff!
-        </p>
+        </h1>
       </div>
 
       <PortfolioBrowser samples={workSamples} />

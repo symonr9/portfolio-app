@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { ContentfulImage, MediaPlaceholder } from "@/app/_components/contentful-image";
 import type { RichTextNode, WorkSample } from "@/lib/contentful";
 import type { WorkSampleType } from "@/lib/contentful/types";
@@ -45,6 +45,7 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
   const [sortField, setSortField] = useState<SortField>(defaultSortField);
   const [sortDirection, setSortDirection] =
     useState<SortDirection>(defaultSortDirection);
+  const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const activeCategory = categories[activeIndex];
   const queryText = query.trim().toLowerCase();
@@ -63,6 +64,31 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
     setQuery("");
     setSortField(defaultSortField);
     setSortDirection(defaultSortDirection);
+  }
+
+  function handleTabKeyDown(
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ) {
+    let nextIndex: number | null = null;
+
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      nextIndex = (index + 1) % categories.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      nextIndex = (index - 1 + categories.length) % categories.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = categories.length - 1;
+    }
+
+    if (nextIndex === null) {
+      return;
+    }
+
+    event.preventDefault();
+    selectCategory(nextIndex);
+    tabRefs.current[nextIndex]?.focus();
   }
 
   return (
@@ -99,7 +125,12 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
                 id={`portfolio-tab-${category.type}`}
                 key={category.type}
                 onClick={() => selectCategory(index)}
+                onKeyDown={(event) => handleTabKeyDown(event, index)}
+                ref={(node) => {
+                  tabRefs.current[index] = node;
+                }}
                 role="tab"
+                tabIndex={isActive ? 0 : -1}
                 type="button"
               >
                 {category.label}
@@ -155,11 +186,13 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
           >
             {categories.map((category) => (
               <section
+                aria-hidden={category.type !== activeCategory.type}
                 aria-labelledby={`portfolio-tab-${category.type}`}
                 className="w-full shrink-0"
                 id={`portfolio-panel-${category.type}`}
                 key={category.type}
                 role="tabpanel"
+                tabIndex={category.type === activeCategory.type ? 0 : -1}
               >
                 {category.type === activeCategory.type ? (
                   <PortfolioSampleList
@@ -229,7 +262,7 @@ function PortfolioSampleList({
   return (
     <>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-semibold text-muted">
+        <p aria-live="polite" className="text-sm font-semibold text-muted">
           {samples.length} {samples.length === 1 ? "sample" : "samples"}
         </p>
       </div>

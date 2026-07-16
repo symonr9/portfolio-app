@@ -34,6 +34,7 @@ export function SiteShell({
               <ContentfulImage
                 className="size-12 shrink-0 rounded-sm border border-foreground/15 object-cover shadow-sm transition-transform group-hover:-translate-y-0.5"
                 image={profile.avatar}
+                priority
                 sizes="60px"
               />
             ) : (
