@@ -728,6 +728,16 @@
           "omitted": false
         },
         {
+          "id": "descriptionRichText",
+          "name": "Rich description",
+          "type": "RichText",
+          "localized": false,
+          "required": false,
+          "validations": [],
+          "disabled": false,
+          "omitted": false
+        },
+        {
           "id": "description",
           "name": "Description",
           "type": "Text",

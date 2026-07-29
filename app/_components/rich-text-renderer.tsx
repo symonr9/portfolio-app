@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ContentfulImage } from "./contentful-image";
+import { MarkdownRenderer } from "./markdown-renderer";
 import type { ContentfulImage as ContentfulImageData, RichTextDocument, RichTextNode } from "@/lib/contentful";
 
 type RichTextRendererProps = {
@@ -8,7 +9,7 @@ type RichTextRendererProps = {
   className?: string;
 };
 
-const blockClassName = "break-words leading-8 text-muted";
+const blockClassName = "break-words whitespace-pre-line leading-8 text-muted";
 
 export function RichTextRenderer({
   content,
@@ -17,9 +18,7 @@ export function RichTextRenderer({
 }: RichTextRendererProps) {
   if (!content?.json) {
     return fallback ? (
-      <div className={className}>
-        <p className={blockClassName}>{fallback}</p>
-      </div>
+      <MarkdownRenderer className={className}>{fallback}</MarkdownRenderer>
     ) : null;
   }
 
@@ -47,11 +46,17 @@ function renderNode(
 
   switch (node.nodeType) {
     case "paragraph":
-      return hasRenderableText(node) ? (
+      return (
         <p className={blockClassName} key={key}>
-          {children}
+          {hasRenderableContent(node) ? children : <br aria-hidden="true" />}
         </p>
-      ) : null;
+      );
+    case "heading-1":
+      return (
+        <h1 className="break-words pt-5 text-4xl font-semibold text-foreground" key={key}>
+          {children}
+        </h1>
+      );
     case "heading-2":
       return (
         <h2 className="break-words pt-4 text-3xl font-semibold text-foreground" key={key}>
@@ -69,6 +74,21 @@ function renderNode(
         <h4 className="break-words pt-2 text-xl font-semibold text-foreground" key={key}>
           {children}
         </h4>
+      );
+    case "heading-5":
+      return (
+        <h5 className="break-words pt-2 text-lg font-semibold text-foreground" key={key}>
+          {children}
+        </h5>
+      );
+    case "heading-6":
+      return (
+        <h6
+          className="break-words pt-2 text-base font-semibold uppercase tracking-wide text-foreground"
+          key={key}
+        >
+          {children}
+        </h6>
       );
     case "unordered-list":
       return (
@@ -99,6 +119,32 @@ function renderNode(
       );
     case "hr":
       return <hr className="border-foreground/10" key={key} />;
+    case "table":
+      return (
+        <div className="overflow-x-auto" key={key}>
+          <table className="w-full border-collapse text-left text-muted">
+            <tbody>{children}</tbody>
+          </table>
+        </div>
+      );
+    case "table-row":
+      return <tr key={key}>{children}</tr>;
+    case "table-header-cell":
+      return (
+        <th
+          className="border border-foreground/15 bg-surface px-4 py-3 font-semibold text-foreground"
+          key={key}
+          scope="col"
+        >
+          {children}
+        </th>
+      );
+    case "table-cell":
+      return (
+        <td className="border border-foreground/15 px-4 py-3 align-top" key={key}>
+          {children}
+        </td>
+      );
     case "hyperlink":
       return node.data?.uri ? (
         <InlineLink href={node.data.uri} key={key}>
@@ -123,6 +169,10 @@ function InlineLink({
   children: React.ReactNode;
   href: string;
 }) {
+  if (!isSafeHref(href)) {
+    return children;
+  }
+
   const isInternal = href.startsWith("/");
   const className =
     "break-words rounded-sm font-semibold text-accent-text underline hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
@@ -181,7 +231,7 @@ function renderEmbeddedAsset(
 }
 
 function renderText(node: RichTextNode, key: string) {
-  let content: React.ReactNode = node.value ?? "";
+  let content: React.ReactNode = renderTextWithLineBreaks(node.value ?? "", key);
 
   for (const mark of node.marks ?? []) {
     if (mark.type === "bold") {
@@ -194,6 +244,22 @@ function renderText(node: RichTextNode, key: string) {
 
     if (mark.type === "italic") {
       content = <em key={`${key}-italic`}>{content}</em>;
+    }
+
+    if (mark.type === "underline") {
+      content = <u key={`${key}-underline`}>{content}</u>;
+    }
+
+    if (mark.type === "superscript") {
+      content = <sup key={`${key}-superscript`}>{content}</sup>;
+    }
+
+    if (mark.type === "subscript") {
+      content = <sub key={`${key}-subscript`}>{content}</sub>;
+    }
+
+    if (mark.type === "strikethrough") {
+      content = <s key={`${key}-strikethrough`}>{content}</s>;
     }
 
     if (mark.type === "code") {
@@ -211,12 +277,33 @@ function renderText(node: RichTextNode, key: string) {
   return <span key={key}>{content}</span>;
 }
 
-function hasRenderableText(node: RichTextNode): boolean {
+function renderTextWithLineBreaks(value: string, key: string) {
+  const lines = value.split(/\r?\n/);
+
+  return lines.flatMap((line, index) =>
+    index === 0
+      ? [line]
+      : [<br key={`${key}-line-break-${index}`} />, line],
+  );
+}
+
+function hasRenderableContent(node: RichTextNode): boolean {
   return Boolean(
     node.content?.some((child) =>
       child.nodeType === "text"
         ? child.value?.trim()
-        : hasRenderableText(child),
+        : hasRenderableContent(child),
     ),
+  );
+}
+
+function isSafeHref(href: string) {
+  return (
+    href.startsWith("/") ||
+    href.startsWith("#") ||
+    href.startsWith("https://") ||
+    href.startsWith("http://") ||
+    href.startsWith("mailto:") ||
+    href.startsWith("tel:")
   );
 }

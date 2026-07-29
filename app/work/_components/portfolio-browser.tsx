@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { ContentfulImage, MediaPlaceholder } from "@/app/_components/contentful-image";
+import { MarkdownInline } from "@/app/_components/markdown-renderer";
 import type { RichTextNode, WorkSample } from "@/lib/contentful";
 import type { WorkSampleType } from "@/lib/contentful/types";
 import styles from "./portfolio-browser.module.css";
@@ -102,11 +103,10 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
         >
           <span
             aria-hidden="true"
-            className="absolute left-1 top-1 hidden h-[calc(100%-0.5rem)] rounded-sm bg-foreground transition-transform duration-500 ease-out sm:block"
+            className="pointer-events-none absolute left-1 top-1 hidden h-[calc(100%-0.5rem)] rounded-sm bg-foreground transition-transform duration-500 ease-out sm:block"
             style={{
               transform: `translateX(${activeIndex * 100}%)`,
               width: `calc((100% - 0.5rem) / ${categories.length})`,
-              cursor: `pointer`,
             }}
           />
           {categories.map((category, index) => {
@@ -266,19 +266,21 @@ function PortfolioSampleList({
           {samples.length} {samples.length === 1 ? "sample" : "samples"}
         </p>
       </div>
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {samples.map((sample) => (
           <Link
-            className="group rounded-sm border border-foreground/10 bg-surface p-5 transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:p-6"
+            className="group min-w-0 rounded-sm border border-foreground/10 bg-surface p-5 transition-transform hover:-translate-y-1 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent sm:p-6"
             href={`/work/${sample.slug}`}
             key={sample.slug}
           >
             {sample.featuredImage ? (
-              <ContentfulImage
-                className="mb-6 aspect-[16/9] w-full rounded-sm object-cover"
-                image={sample.featuredImage}
-                sizes="(min-width: 768px) 50vw, 100vw"
-              />
+              <div className="mb-6 flex aspect-[16/9] items-center justify-center overflow-hidden rounded-sm bg-foreground/5">
+                <ContentfulImage
+                  className="h-full min-w-0 max-w-full object-contain"
+                  image={sample.featuredImage}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                />
+              </div>
             ) : (
               <MediaPlaceholder className="mb-6 aspect-[16/9] rounded-sm" />
             )}
@@ -295,7 +297,9 @@ function PortfolioSampleList({
             <h2 className="mt-8 break-words text-2xl font-semibold">
               {sample.title}
             </h2>
-            <p className="mt-3 leading-7 text-muted">{sample.summary}</p>
+            <p className="mt-3 leading-7 text-muted">
+              <MarkdownInline>{sample.summary}</MarkdownInline>
+            </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {sample.organization ? (
                 <span className="rounded-sm border border-foreground/10 px-2 py-1 text-xs text-muted break-words">

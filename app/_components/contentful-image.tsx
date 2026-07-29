@@ -16,7 +16,7 @@ export function ContentfulImage({
 }: ContentfulImageProps) {
   return (
     <Image
-      alt={image.description ?? image.title}
+      alt={image.description?.trim() || image.title}
       className={className}
       height={image.height}
       priority={priority}

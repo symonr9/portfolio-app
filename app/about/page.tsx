@@ -72,9 +72,11 @@ export default async function AboutPage() {
                     .filter(Boolean)
                     .join(" / ")}
                 </p>
-                <p className="mt-4 leading-7 text-muted">
-                  {experience.description}
-                </p>
+                <RichTextRenderer
+                  className="mt-4 space-y-4"
+                  content={experience.descriptionRichText}
+                  fallback={experience.description}
+                />
               </article>
             ))}
           </div>

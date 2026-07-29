@@ -122,6 +122,7 @@ export type Experience = {
   endDate: string | null;
   current: boolean;
   category: string | null;
+  descriptionRichText: RichTextDocument | null;
   description: string | null;
   achievements: string[];
   skillsUsed: Tag[];
@@ -222,6 +223,7 @@ type ExperienceItem = {
   endDate?: string | null;
   current?: boolean | null;
   category?: string | null;
+  descriptionRichText?: RichTextField;
   description?: string | null;
   achievements?: string[] | null;
   skillsUsedCollection?: {
@@ -256,6 +258,12 @@ const RICH_TEXT_FIELDS = `
       }
     }
   }
+`;
+
+const EXPERIENCE_RICH_DESCRIPTION_FIELD = `
+        descriptionRichText {
+          ${RICH_TEXT_FIELDS}
+        }
 `;
 
 const PROFILE_FIELDS = `
@@ -429,7 +437,7 @@ const ABOUT_QUERY = `
         ${PROFILE_FIELDS}
       }
     }
-    experienceCollection(limit: 2, order: [sortOrder_ASC, startDate_DESC], preview: $preview) {
+    experienceCollection(limit: 100, order: startDate_DESC, preview: $preview) {
       items {
         title
         organization
@@ -438,6 +446,7 @@ const ABOUT_QUERY = `
         endDate
         current
         category
+        ${EXPERIENCE_RICH_DESCRIPTION_FIELD}
         description
         achievements
         skillsUsedCollection(limit: 8, preview: $preview) {
@@ -466,6 +475,7 @@ const RESUME_QUERY = `
         endDate
         current
         category
+        ${EXPERIENCE_RICH_DESCRIPTION_FIELD}
         description
         achievements
         skillsUsedCollection(limit: 8, preview: $preview) {
@@ -478,6 +488,26 @@ const RESUME_QUERY = `
     expertiseTagCollection(limit: 100, order: [sortOrder_ASC, name_ASC], preview: $preview) {
       items {
         ${TAG_FIELDS}
+      }
+    }
+  }
+`;
+
+const ABOUT_QUERY_WITH_LEGACY_DESCRIPTION = ABOUT_QUERY.replace(
+  EXPERIENCE_RICH_DESCRIPTION_FIELD,
+  "",
+);
+
+const RESUME_QUERY_WITH_LEGACY_DESCRIPTION = RESUME_QUERY.replace(
+  EXPERIENCE_RICH_DESCRIPTION_FIELD,
+  "",
+);
+
+const EXPERIENCE_SCHEMA_QUERY = `
+  query ExperienceRichDescriptionSupport {
+    __type(name: "Experience") {
+      fields {
+        name
       }
     }
   }
@@ -573,29 +603,65 @@ export async function getBlogPostSlugParams(options?: ContentfulRequestOptions) 
 }
 
 export async function getAboutPageData(options?: ContentfulRequestOptions) {
+  const supportsRichDescription =
+    await supportsExperienceRichDescription(options);
   const data = await contentfulGraphQLFetch<{
     profileCollection?: { items?: ProfileItem[] | null } | null;
     experienceCollection?: { items?: ExperienceItem[] | null } | null;
-  }>(ABOUT_QUERY, {}, options);
+  }>(
+    supportsRichDescription
+      ? ABOUT_QUERY
+      : ABOUT_QUERY_WITH_LEGACY_DESCRIPTION,
+    {},
+    options,
+  );
 
   return {
     profile: firstProfile(data.profileCollection?.items),
-    experiences: mapExperiences(data.experienceCollection?.items),
+    experiences: sortExperiences(
+      mapExperiences(data.experienceCollection?.items),
+    ),
   };
 }
 
 export async function getResumePageData(options?: ContentfulRequestOptions) {
+  const supportsRichDescription =
+    await supportsExperienceRichDescription(options);
   const data = await contentfulGraphQLFetch<{
     profileCollection?: { items?: ProfileItem[] | null } | null;
     experienceCollection?: { items?: ExperienceItem[] | null } | null;
     expertiseTagCollection?: { items?: TagItem[] | null } | null;
-  }>(RESUME_QUERY, {}, options);
+  }>(
+    supportsRichDescription
+      ? RESUME_QUERY
+      : RESUME_QUERY_WITH_LEGACY_DESCRIPTION,
+    {},
+    options,
+  );
 
   return {
     profile: firstProfile(data.profileCollection?.items),
-    experiences: mapExperiences(data.experienceCollection?.items),
+    experiences: sortExperiences(
+      mapExperiences(data.experienceCollection?.items),
+    ),
     expertiseTags: mapTags(data.expertiseTagCollection?.items),
   };
+}
+
+async function supportsExperienceRichDescription(
+  options?: ContentfulRequestOptions,
+) {
+  const data = await contentfulGraphQLFetch<{
+    __type?: {
+      fields?: { name?: string | null }[] | null;
+    } | null;
+  }>(EXPERIENCE_SCHEMA_QUERY, {}, options);
+
+  return Boolean(
+    data.__type?.fields?.some(
+      (field) => field.name === "descriptionRichText",
+    ),
+  );
 }
 
 export async function getContactPageData(options?: ContentfulRequestOptions) {
@@ -748,6 +814,7 @@ function mapExperiences(items?: ExperienceItem[] | null): Experience[] {
         endDate: item.endDate ?? null,
         current: Boolean(item.current),
         category: item.category ?? null,
+        descriptionRichText: normalizeRichText(item.descriptionRichText),
         description: item.description ?? null,
         achievements: item.achievements ?? [],
         skillsUsed: mapTags(item.skillsUsedCollection?.items),
@@ -771,6 +838,35 @@ function mapAssets(items?: AssetItem[] | null): ContentfulImage[] {
     const asset = mapAsset(item);
     return asset ? [asset] : [];
   });
+}
+
+function sortExperiences(experiences: Experience[]) {
+  return experiences.toSorted((first, second) => {
+    if (first.current !== second.current) {
+      return first.current ? -1 : 1;
+    }
+
+    const endDateDifference =
+      experienceDateValue(second.endDate) - experienceDateValue(first.endDate);
+
+    if (endDateDifference) {
+      return endDateDifference;
+    }
+
+    return (
+      experienceDateValue(second.startDate) -
+      experienceDateValue(first.startDate)
+    );
+  });
+}
+
+function experienceDateValue(date: string | null) {
+  if (!date) {
+    return Number.NEGATIVE_INFINITY;
+  }
+
+  const value = new Date(date).getTime();
+  return Number.isNaN(value) ? Number.NEGATIVE_INFINITY : value;
 }
 
 function mapMediaAssets(items?: AssetItem[] | null): ContentfulMediaAsset[] {

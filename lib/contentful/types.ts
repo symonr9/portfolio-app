@@ -191,6 +191,7 @@ export interface ExperienceFields {
   startDate?: string;
   endDate?: string;
   current?: boolean;
+  descriptionRichText?: RichTextDocument;
   description?: string;
   achievements?: string[];
   skillsUsed?: ContentfulReference<ExpertiseTagEntry>[];

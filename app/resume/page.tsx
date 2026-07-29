@@ -3,6 +3,8 @@ import Link from "next/link";
 import { getContentfulDraftOptions, getResumePageData } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
 import { formatMonthYear } from "@/lib/format-date";
+import { MarkdownInline } from "../_components/markdown-renderer";
+import { RichTextRenderer } from "../_components/rich-text-renderer";
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Resume",
@@ -118,15 +120,15 @@ export default async function ResumePage() {
                   ))}
                 </div>
               ) : null}
-              {experience.description ? (
-                <p className="mt-5 leading-7 text-muted">
-                  {experience.description}
-                </p>
-              ) : null}
+              <RichTextRenderer
+                className="mt-5 space-y-4"
+                content={experience.descriptionRichText}
+                fallback={experience.description}
+              />
               <ul className="mt-5 list-disc space-y-3 pl-5">
                 {experience.achievements.map((achievement) => (
                   <li className="leading-7 text-muted" key={achievement}>
-                    {achievement}
+                    <MarkdownInline>{achievement}</MarkdownInline>
                   </li>
                 ))}
               </ul>

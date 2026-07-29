@@ -10,7 +10,14 @@ import { buildPageMetadata } from "@/lib/site";
 import { formatDate } from "@/lib/format-date";
 import { ContentfulImage, MediaPlaceholder } from "../../_components/contentful-image";
 import { MediaGallery } from "../../_components/media-gallery";
-import { MediaEmbed } from "../../_components/media-embed";
+import {
+  ExternalMediaCard,
+  MediaEmbed,
+} from "../../_components/media-embed";
+import {
+  MarkdownInline,
+  MarkdownRenderer,
+} from "../../_components/markdown-renderer";
 import { RichTextRenderer } from "../../_components/rich-text-renderer";
 
 type WorkDetailProps = {
@@ -52,6 +59,8 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
     notFound();
   }
 
+  const primaryMediaUrl = sample.embedUrl ?? sample.videoUrl;
+
   return (
     <article>
       <section className="border-b border-foreground/10">
@@ -70,7 +79,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
               {sample.title}
             </h1>
             <p className="mt-6 max-w-3xl text-lg leading-8 text-muted">
-              {sample.summary}
+              <MarkdownInline>{sample.summary}</MarkdownInline>
             </p>
           </div>
           <aside className="rounded-sm border border-foreground/10 bg-surface p-5 sm:p-6">
@@ -105,11 +114,11 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
       </section>
 
       <section className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-16 lg:grid-cols-[0.65fr_1fr] lg:px-8">
-        <div>
+        <div className="min-w-0">
           <h2 className="break-words text-3xl font-semibold">Overview</h2>
-          <p className="mt-4 leading-7 text-muted">
+          <MarkdownRenderer className="mt-4 space-y-4">
             {sample.beforeText ?? sample.summary}
-          </p>
+          </MarkdownRenderer>
           <div className="mt-6 flex flex-wrap gap-2">
             {sample.tags.map((tag) => (
               <span
@@ -121,27 +130,59 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
             ))}
           </div>
         </div>
-        <div>
+        <div className="min-w-0">
           <h2 className="break-words text-3xl font-semibold">Detail</h2>
           <RichTextRenderer
             className="mt-6 space-y-6"
             content={sample.body}
             fallback={sample.afterText}
           />
-          <MediaEmbed
-            embedUrl={sample.embedUrl}
-            title={`${sample.title} media`}
-            videoUrl={sample.videoUrl}
-          />
+          {!urlsReferToSameResource(primaryMediaUrl, sample.externalUrl) ? (
+            <MediaEmbed
+              embedUrl={sample.embedUrl}
+              previewImage={sample.featuredImage}
+              title={`${sample.title} media`}
+              videoUrl={sample.videoUrl}
+            />
+          ) : null}
+          {sample.externalUrl ? (
+            <ExternalMediaCard
+              previewImage={sample.featuredImage}
+              sourceUrl={sample.externalUrl}
+            />
+          ) : null}
           <MediaGallery items={sample.gallery} />
           {sample.outcome ? (
             <div className="mt-10 rounded-sm border border-foreground/10 bg-surface p-6">
               <h2 className="text-2xl font-semibold">Outcome</h2>
-              <p className="mt-4 leading-7 text-muted">{sample.outcome}</p>
+              <MarkdownRenderer className="mt-4 space-y-4">
+                {sample.outcome}
+              </MarkdownRenderer>
             </div>
           ) : null}
         </div>
       </section>
     </article>
   );
+}
+
+function urlsReferToSameResource(
+  firstUrl: string | null,
+  secondUrl: string | null,
+) {
+  if (!firstUrl || !secondUrl) {
+    return false;
+  }
+
+  try {
+    return normalizeComparableUrl(firstUrl) === normalizeComparableUrl(secondUrl);
+  } catch {
+    return firstUrl === secondUrl;
+  }
+}
+
+function normalizeComparableUrl(value: string) {
+  const url = new URL(value);
+  const pathname = url.pathname === "/" ? "" : url.pathname.replace(/\/$/, "");
+  return `${url.origin}${pathname}${url.search}${url.hash}`;
 }

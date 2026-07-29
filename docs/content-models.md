@@ -65,7 +65,7 @@ Fields:
 | --- | --- | --- | --- | --- |
 | Title | `title` | Short text | Yes | Public title. |
 | Slug | `slug` | Short text | Yes | Unique URL slug. |
-| Summary | `summary` | Long text | Yes | Used on cards and listing pages. |
+| Summary | `summary` | Long text | Yes | Markdown-formatted summary used on cards and listing pages. |
 | Type | `type` | Short text | Yes | Use validations for allowed categories. |
 | Organization | `organization` | Short text | No | Client, employer, publication, brand, or project owner. |
 | Role | `role` | Short text | No | Person's role on the work. |
@@ -76,9 +76,9 @@ Fields:
 | Embed URL | `embedUrl` | Short text | No | Embed-safe URL when different from video URL. |
 | External URL | `externalUrl` | Short text | No | Link to live work or source. |
 | Body | `body` | Rich text | No | Detail page narrative. |
-| Before text | `beforeText` | Long text | No | For revision, transformation, or comparison examples. |
-| After text | `afterText` | Long text | No | For revision, transformation, or comparison examples. |
-| Outcome | `outcome` | Long text | No | Results, impact, or reflection. |
+| Before text | `beforeText` | Long text | No | Markdown-formatted overview or comparison text. |
+| After text | `afterText` | Long text | No | Markdown-formatted detail fallback or comparison text. |
+| Outcome | `outcome` | Long text | No | Markdown-formatted results, impact, or reflection. |
 | Tags | `tags` | References, many | No | Restrict to `expertiseTag`. |
 | Featured | `featured` | Boolean | No | Used for home page and highlighted sections. |
 | Sort order | `sortOrder` | Integer | No | Lower numbers appear first when manually ordered. |
@@ -141,8 +141,9 @@ Fields:
 | Start date | `startDate` | Date | No | Date can be month/year or exact, depending on Contentful settings. |
 | End date | `endDate` | Date | No | Leave empty when current. |
 | Current | `current` | Boolean | No | Indicates ongoing role or activity. |
-| Description | `description` | Long text | No | Short role summary. |
-| Achievements | `achievements` | Array of short text | No | Bullet points. |
+| Rich description | `descriptionRichText` | Rich text | No | Preferred role summary; supports headings, lists, links, text marks, tables, and embedded assets. |
+| Description | `description` | Long text | No | Legacy Markdown-formatted fallback when rich description is empty. |
+| Achievements | `achievements` | Array of short text | No | Bullet points with inline Markdown formatting. |
 | Skills used | `skillsUsed` | References, many | No | Restrict to `expertiseTag`. |
 | Organization URL | `organizationUrl` | Short text | No | External link. |
 | Category | `category` | Short text | No | Example: work, education, certification, volunteer, award. |
