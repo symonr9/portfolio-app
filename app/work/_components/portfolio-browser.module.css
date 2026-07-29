@@ -27,6 +27,15 @@
   width: 100%;
 }
 
+@media (min-width: 640px) {
+  .categoryGrid {
+    grid-template-columns: repeat(
+      var(--portfolio-category-count),
+      minmax(0, 1fr)
+    );
+  }
+}
+
 @media (max-width: 767px) {
   .backgroundWrap {
     height: clamp(5rem, 24vw, 7rem);

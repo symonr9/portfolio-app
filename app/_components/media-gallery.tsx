@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import { ContentfulImage } from "./contentful-image";
+import { GalleryVideo } from "./gallery-video";
 import type {
   ContentfulImage as ContentfulImageData,
   ContentfulMediaAsset,
@@ -11,35 +15,92 @@ type MediaGalleryProps = {
 const videoExtensions = [".mp4", ".webm", ".ogg", ".mov"];
 
 export function MediaGallery({ items }: MediaGalleryProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   if (!items.length) {
     return null;
   }
 
+  const activeItem = items[Math.min(activeIndex, items.length - 1)];
+
+  function showPrevious() {
+    setActiveIndex((index) => (index - 1 + items.length) % items.length);
+  }
+
+  function showNext() {
+    setActiveIndex((index) => (index + 1) % items.length);
+  }
+
   return (
-    <section aria-labelledby="work-gallery-heading" className="mt-10">
-      <h2 id="work-gallery-heading" className="break-words text-3xl font-semibold">
-        Gallery
-      </h2>
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        {items.map((item) => (
-          <GalleryItem item={item} key={item.id} />
-        ))}
+    <section
+      aria-label="Work sample gallery"
+      aria-roledescription="carousel"
+      className="flex h-full min-h-0 flex-col overflow-hidden rounded-sm border border-foreground/10 bg-surface"
+    >
+      <div className="flex items-center justify-between gap-4 border-b border-foreground/10 px-4 py-2.5">
+        <h2 className="text-sm font-semibold">Gallery</h2>
+        <p aria-live="polite" className="font-mono text-xs text-muted">
+          {activeIndex + 1} / {items.length}
+        </p>
       </div>
+
+      <div className="min-h-0 flex-1">
+        <GalleryItem item={activeItem} />
+      </div>
+
+      {items.length > 1 ? (
+        <div
+          aria-label="Choose gallery item"
+          className="flex items-center justify-between gap-3 border-t border-foreground/10 px-3 py-2"
+          role="group"
+        >
+          <button
+            aria-label="Show previous gallery item"
+            className="inline-flex min-h-9 items-center rounded-sm border border-foreground/15 px-3 text-sm font-semibold transition-colors hover:bg-foreground hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            onClick={showPrevious}
+            type="button"
+          >
+            ← Previous
+          </button>
+          <div aria-hidden="true" className="flex min-w-0 gap-1.5">
+            {items.slice(0, 9).map((item, index) => (
+              <span
+                className={[
+                  "h-1.5 rounded-full transition-[width,background-color]",
+                  index === activeIndex
+                    ? "w-6 bg-accent"
+                    : "w-1.5 bg-foreground/20",
+                ].join(" ")}
+                key={item.id}
+              />
+            ))}
+          </div>
+          <button
+            aria-label="Show next gallery item"
+            className="inline-flex min-h-9 items-center rounded-sm border border-foreground/15 px-3 text-sm font-semibold transition-colors hover:bg-foreground hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            onClick={showNext}
+            type="button"
+          >
+            Next →
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }
 
 function GalleryItem({ item }: { item: ContentfulMediaAsset }) {
   if (isImage(item)) {
-    const image = toContentfulImage(item);
-
     return (
-      <figure className="overflow-hidden rounded-sm border border-foreground/10 bg-surface">
-        <ContentfulImage
-          className="aspect-[4/3] w-full object-cover"
-          image={image}
-          sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-        />
+      <figure className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)_auto]">
+        <div className="relative min-h-0 bg-foreground/5">
+          <ContentfulImage
+            className="absolute inset-0 h-full w-full object-contain"
+            image={toContentfulImage(item)}
+            priority
+            sizes="(min-width: 1024px) 58vw, 100vw"
+          />
+        </div>
         <MediaCaption item={item} />
       </figure>
     );
@@ -47,35 +108,33 @@ function GalleryItem({ item }: { item: ContentfulMediaAsset }) {
 
   if (isVideo(item)) {
     return (
-      <figure className="overflow-hidden rounded-sm border border-foreground/10 bg-surface">
-        <video
-          className="aspect-video w-full bg-foreground/5"
-          controls
-          preload="metadata"
-          src={item.url}
-        >
-          <a href={item.url}>Open video</a>
-        </video>
+      <figure className="grid h-full min-h-0 grid-rows-[minmax(0,1fr)_auto]">
+        <div className="min-h-0 overflow-hidden">
+          <GalleryVideo
+            height={item.height}
+            title={item.title}
+            url={item.url}
+            width={item.width}
+          />
+        </div>
         <MediaCaption item={item} />
       </figure>
     );
   }
 
   return (
-    <article className="flex min-h-36 flex-col justify-between rounded-sm border border-foreground/10 bg-surface p-5">
-      <div>
-        <p className="break-words text-lg font-semibold">{item.title}</p>
-        {item.description ? (
-          <p className="mt-2 break-words text-sm leading-6 text-muted">
-            {item.description}
-          </p>
-        ) : null}
-        <p className="mt-3 break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
-          {formatContentType(item.contentType)}
+    <article className="flex h-full min-h-0 flex-col items-center justify-center overflow-auto p-6 text-center">
+      <p className="break-words text-lg font-semibold">{item.title}</p>
+      {item.description ? (
+        <p className="mt-2 max-w-xl break-words text-sm leading-6 text-muted">
+          {item.description}
         </p>
-      </div>
+      ) : null}
+      <p className="mt-3 break-words font-mono text-xs uppercase tracking-[0.16em] text-muted">
+        {formatContentType(item.contentType)}
+      </p>
       <a
-        className="mt-5 inline-flex w-fit rounded-sm bg-foreground px-4 py-2 text-sm font-semibold text-background transition-colors hover:bg-accent hover:text-accent-contrast focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="mt-5 inline-flex min-h-11 items-center rounded-sm bg-foreground px-4 py-2 text-sm font-semibold text-background transition-colors hover:bg-accent hover:text-accent-contrast focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         download={item.fileName}
         href={item.url}
         rel="noreferrer"
@@ -93,10 +152,10 @@ function MediaCaption({ item }: { item: ContentfulMediaAsset }) {
   }
 
   return (
-    <figcaption className="space-y-1 p-4">
-      <p className="break-words text-sm font-semibold">{item.title}</p>
+    <figcaption className="max-h-20 overflow-auto border-t border-foreground/10 px-4 py-2.5 text-sm">
+      <p className="break-words font-semibold">{item.title}</p>
       {item.description ? (
-        <p className="break-words text-sm leading-6 text-muted">
+        <p className="mt-0.5 break-words leading-5 text-muted">
           {item.description}
         </p>
       ) : null}

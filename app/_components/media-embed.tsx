@@ -4,6 +4,7 @@ import type { ContentfulImage as ContentfulImageData } from "@/lib/contentful";
 type MediaEmbedProps = {
   embedUrl?: string | null;
   previewImage?: ContentfulImageData | null;
+  priority?: boolean;
   videoUrl?: string | null;
   title: string;
 };
@@ -13,6 +14,7 @@ const directVideoExtensions = [".mp4", ".webm", ".ogg"];
 export function MediaEmbed({
   embedUrl,
   previewImage,
+  priority = false,
   title,
   videoUrl,
 }: MediaEmbedProps) {
@@ -55,15 +57,21 @@ export function MediaEmbed({
   }
 
   return (
-    <ExternalMediaCard previewImage={previewImage} sourceUrl={sourceUrl} />
+    <ExternalMediaCard
+      previewImage={previewImage}
+      priority={priority}
+      sourceUrl={sourceUrl}
+    />
   );
 }
 
 export function ExternalMediaCard({
   previewImage,
+  priority = false,
   sourceUrl,
 }: {
   previewImage?: ContentfulImageData | null;
+  priority?: boolean;
   sourceUrl: string;
 }) {
   const metadata = getExternalPageMetadata(sourceUrl);
@@ -77,8 +85,9 @@ export function ExternalMediaCard({
       <div className="relative aspect-video overflow-hidden border-b border-foreground/10 bg-[linear-gradient(135deg,var(--surface-warm),var(--background))]">
         {previewImage ? (
           <ContentfulImage
-            className="h-full min-w-0 max-w-full object-contain"
+            className="h-full w-full min-w-0 max-w-full object-contain"
             image={previewImage}
+            priority={priority}
             sizes="(min-width: 1024px) 640px, 100vw"
           />
         ) : (

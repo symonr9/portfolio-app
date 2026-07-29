@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getContentfulDraftOptions, getResumePageData } from "@/lib/contentful";
 import { buildPageMetadata } from "@/lib/site";
 import { formatMonthYear } from "@/lib/format-date";
+import { summarizeText } from "@/lib/summarize-text";
 import { MarkdownInline } from "../_components/markdown-renderer";
 import { RichTextRenderer } from "../_components/rich-text-renderer";
 
@@ -17,6 +18,16 @@ export default async function ResumePage() {
   const contentfulOptions = await getContentfulDraftOptions();
   const { experiences, expertiseTags, profile } =
     await getResumePageData(contentfulOptions);
+  const primaryExperiences = experiences.slice(0, 3);
+  const additionalExperiences = experiences.slice(3);
+  const selectedAccomplishments = primaryExperiences
+    .flatMap((experience) =>
+      experience.achievements.slice(0, 1).map((achievement) => ({
+        achievement,
+        experience,
+      })),
+    )
+    .slice(0, 3);
 
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
@@ -41,7 +52,7 @@ export default async function ResumePage() {
           ) : null}
         </div>
         <div className="mt-8 text-lg leading-8 text-muted">
-          <p>{profile.shortBio}</p>
+          <p>{summarizeText(profile.shortBio)}</p>
           <dl className="mt-8 grid gap-4 text-sm sm:grid-cols-2">
             <div>
               <dt className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
@@ -69,7 +80,7 @@ export default async function ResumePage() {
       </div>
 
       <div className="border-b border-foreground/10 py-10">
-        <h2 className="text-xl font-semibold">Expertise</h2>
+        <h2 className="text-2xl font-semibold">Capabilities</h2>
         <div className="mt-5 flex flex-wrap gap-2">
           {expertiseTags.map((tag) => (
             <span
@@ -82,8 +93,30 @@ export default async function ResumePage() {
         </div>
       </div>
 
+      {selectedAccomplishments.length > 0 ? (
+        <section className="border-b border-foreground/10 py-10">
+          <h2 className="text-2xl font-semibold">Selected accomplishments</h2>
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {selectedAccomplishments.map(({ achievement, experience }) => (
+              <article
+                className="rounded-sm border border-foreground/10 bg-surface p-5"
+                key={`${experience.title}-${achievement}`}
+              >
+                <p className="font-mono text-xs uppercase tracking-[0.16em] text-muted">
+                  {experience.title}
+                </p>
+                <p className="mt-3 leading-7 text-muted">
+                  <MarkdownInline>{achievement}</MarkdownInline>
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <div className="divide-y divide-foreground/10">
-        {experiences.map((experience) => {
+        <h2 className="py-8 text-3xl font-semibold">Recent experience</h2>
+        {primaryExperiences.map((experience) => {
           const tags = [
             ...(experience.category ? [experience.category] : []),
             ...experience.skillsUsed.map((tag) => tag.name),
@@ -136,6 +169,35 @@ export default async function ResumePage() {
           );
         })}
       </div>
+
+      {additionalExperiences.length > 0 ? (
+        <section className="border-t border-foreground/10 py-10">
+          <h2 className="text-2xl font-semibold">Additional experience</h2>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {additionalExperiences.map((experience) => (
+              <article
+                className="rounded-sm border border-foreground/10 bg-surface p-5"
+                key={`${experience.title}-${experience.organization}-${experience.startDate}`}
+              >
+                <h3 className="break-words text-lg font-semibold">
+                  {experience.title}
+                </h3>
+                <p className="mt-2 break-words text-sm text-muted">
+                  {[experience.organization, experience.location]
+                    .filter(Boolean)
+                    .join(" / ")}
+                </p>
+                <p className="mt-3 font-mono text-xs uppercase tracking-[0.16em] text-muted">
+                  {formatExperienceDate(
+                    experience.startDate,
+                    experience.current ? "Present" : experience.endDate,
+                  )}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </section>
   );
 }

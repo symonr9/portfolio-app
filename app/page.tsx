@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getContentfulDraftOptions, getHomePageData } from "@/lib/contentful";
+import { summarizeText } from "@/lib/summarize-text";
 import { ContentfulImage, MediaPlaceholder } from "./_components/contentful-image";
 
 export default async function Home() {
@@ -24,9 +25,14 @@ export default async function Home() {
             <p className="mb-5 text-sm font-semibold uppercase tracking-[0.18em] text-foreground-light/75">
               {profile.name}
             </p>
-            <h1 className="break-words text-2xl font-semibold leading-snug text-foreground-light sm:text-3xl">
-              {profile.headline}
+            <h1 className="break-words text-3xl font-semibold leading-snug text-foreground-light sm:text-4xl">
+              {profile.smallHeadline ?? profile.headline}
             </h1>
+            {profile.smallHeadline ? (
+              <p className="mt-5 max-w-3xl text-lg leading-8 text-foreground-light/85">
+                {profile.headline}
+              </p>
+            ) : null}
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/work"
@@ -48,7 +54,7 @@ export default async function Home() {
       <section className="border-b border-foreground/10 bg-surface">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-5 py-12 sm:flex-row sm:items-center sm:justify-between lg:px-8">
           <p className="max-w-3xl flex-1 text-lg leading-8 text-muted">
-            {profile.shortBio}
+            {summarizeText(profile.shortBio)}
           </p>
           {profile.avatar ? (
             <ContentfulImage

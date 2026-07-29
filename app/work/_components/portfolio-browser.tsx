@@ -15,22 +15,27 @@ type PortfolioBrowserProps = {
 
 type PortfolioCategory = {
   label: string;
-  type: WorkSampleType;
+  type: WorkSampleType | "selected";
 };
 
-type SortField = "title" | "publishDate";
-type SortDirection = "asc" | "desc";
+type SortOption = "newest" | "oldest" | "title-asc" | "title-desc";
 
 const categories: PortfolioCategory[] = [
+  { label: "Selected work", type: "selected" },
   { label: "Writing", type: "writing" },
   { label: "Social Media", type: "social-media" },
   { label: "Publishing", type: "publishing" },
   { label: "Photography", type: "photography" },
   { label: "Art", type: "art" },
 ];
+const backgroundCategories = categories.filter(
+  (
+    category,
+  ): category is PortfolioCategory & { type: WorkSampleType } =>
+    category.type !== "selected",
+);
 
-const defaultSortField: SortField = "publishDate";
-const defaultSortDirection: SortDirection = "desc";
+const defaultSortOption: SortOption = "newest";
 
 const categoryBackgrounds: Record<WorkSampleType, string> = {
   art: "/art.png",
@@ -41,30 +46,46 @@ const categoryBackgrounds: Record<WorkSampleType, string> = {
 };
 
 export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
+  const availableCategories = useMemo(
+    () =>
+      categories.filter(
+        (category) =>
+          category.type === "selected" ||
+          samples.some((sample) => sample.type === category.type),
+      ),
+    [samples],
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const [query, setQuery] = useState("");
-  const [sortField, setSortField] = useState<SortField>(defaultSortField);
-  const [sortDirection, setSortDirection] =
-    useState<SortDirection>(defaultSortDirection);
+  const [sortOption, setSortOption] =
+    useState<SortOption>(defaultSortOption);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const activeCategory = categories[activeIndex];
+  const activeCategory = availableCategories[activeIndex];
   const queryText = query.trim().toLowerCase();
 
   const visibleSamples = useMemo(() => {
-    return samples
-      .filter((sample) => sample.type === activeCategory.type)
+    const selectedSamples = samples.filter((sample) =>
+      activeCategory.type === "selected"
+        ? sample.featured
+        : sample.type === activeCategory.type,
+    );
+    const curatedSamples =
+      activeCategory.type === "selected" && selectedSamples.length === 0
+        ? samples.slice(0, 6)
+        : selectedSamples;
+
+    return curatedSamples
       .filter((sample) => matchesQuery(sample, queryText))
       .sort((first, second) =>
-        compareSamples(first, second, sortField, sortDirection),
+        compareSamples(first, second, sortOption),
       );
-  }, [activeCategory.type, queryText, samples, sortDirection, sortField]);
+  }, [activeCategory.type, queryText, samples, sortOption]);
 
   function selectCategory(index: number) {
     setActiveIndex(index);
     setQuery("");
-    setSortField(defaultSortField);
-    setSortDirection(defaultSortDirection);
+    setSortOption(defaultSortOption);
   }
 
   function handleTabKeyDown(
@@ -74,13 +95,14 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
     let nextIndex: number | null = null;
 
     if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-      nextIndex = (index + 1) % categories.length;
+      nextIndex = (index + 1) % availableCategories.length;
     } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-      nextIndex = (index - 1 + categories.length) % categories.length;
+      nextIndex =
+        (index - 1 + availableCategories.length) % availableCategories.length;
     } else if (event.key === "Home") {
       nextIndex = 0;
     } else if (event.key === "End") {
-      nextIndex = categories.length - 1;
+      nextIndex = availableCategories.length - 1;
     }
 
     if (nextIndex === null) {
@@ -94,22 +116,29 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
 
   return (
     <div className="relative isolate mt-10">
-      <PortfolioBackground activeType={activeCategory.type} />
+      <PortfolioBackground
+        activeType={
+          activeCategory.type === "selected" ? null : activeCategory.type
+        }
+      />
       <div className="relative z-10">
         <div
           aria-label="Portfolio categories"
-          className="relative grid rounded-sm border border-foreground/10 bg-surface p-1 shadow-[0_18px_60px_var(--shadow-subtle)] sm:grid-cols-5"
+          className={`${styles.categoryGrid} relative grid rounded-sm border border-foreground/10 bg-surface p-1 shadow-[0_18px_60px_var(--shadow-subtle)]`}
           role="tablist"
+          style={{
+            "--portfolio-category-count": availableCategories.length,
+          } as React.CSSProperties}
         >
           <span
             aria-hidden="true"
             className="pointer-events-none absolute left-1 top-1 hidden h-[calc(100%-0.5rem)] rounded-sm bg-foreground transition-transform duration-500 ease-out sm:block"
             style={{
               transform: `translateX(${activeIndex * 100}%)`,
-              width: `calc((100% - 0.5rem) / ${categories.length})`,
+              width: `calc((100% - 0.5rem) / ${availableCategories.length})`,
             }}
           />
-          {categories.map((category, index) => {
+          {availableCategories.map((category, index) => {
             const isActive = index === activeIndex;
 
             return (
@@ -139,7 +168,7 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
           })}
         </div>
 
-        <div className="mt-5 grid gap-3 rounded-sm border border-foreground/10 bg-surface p-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-end">
+        <div className="mt-5 grid gap-3 rounded-sm border border-foreground/10 bg-surface p-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end">
           <label className="grid gap-2 text-sm font-semibold" htmlFor="portfolio-search">
             Search {activeCategory.label}
             <input
@@ -151,30 +180,20 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
               value={query}
             />
           </label>
-          <label className="grid gap-2 text-sm font-semibold" htmlFor="portfolio-sort-field">
+          <label className="grid gap-2 text-sm font-semibold" htmlFor="portfolio-sort">
             Sort by
             <select
               className="min-h-11 rounded-sm border border-foreground/15 bg-background px-3 text-sm font-normal text-foreground outline-none transition-colors focus:border-accent"
-              id="portfolio-sort-field"
-              onChange={(event) => setSortField(event.target.value as SortField)}
-              value={sortField}
-            >
-              <option value="title">Name</option>
-              <option value="publishDate">Publish date</option>
-            </select>
-          </label>
-          <label className="grid gap-2 text-sm font-semibold" htmlFor="portfolio-sort-direction">
-            Direction
-            <select
-              className="min-h-11 rounded-sm border border-foreground/15 bg-background px-3 text-sm font-normal text-foreground outline-none transition-colors focus:border-accent"
-              id="portfolio-sort-direction"
+              id="portfolio-sort"
               onChange={(event) =>
-                setSortDirection(event.target.value as SortDirection)
+                setSortOption(event.target.value as SortOption)
               }
-              value={sortDirection}
+              value={sortOption}
             >
-              <option value="asc">ASC</option>
-              <option value="desc">DESC</option>
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+              <option value="title-asc">A–Z</option>
+              <option value="title-desc">Z–A</option>
             </select>
           </label>
         </div>
@@ -184,7 +203,7 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
             className="flex transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${activeIndex * 100}%)` }}
           >
-            {categories.map((category) => (
+            {availableCategories.map((category) => (
               <section
                 aria-hidden={category.type !== activeCategory.type}
                 aria-labelledby={`portfolio-tab-${category.type}`}
@@ -210,10 +229,14 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
   );
 }
 
-function PortfolioBackground({ activeType }: { activeType: WorkSampleType }) {
+function PortfolioBackground({
+  activeType,
+}: {
+  activeType: WorkSampleType | null;
+}) {
   return (
     <div aria-hidden="true" className={styles.backgroundWrap}>
-      {categories.map((category) => (
+      {backgroundCategories.map((category) => (
         <DecorativeImage
           active={activeType === category.type}
           key={category.type}
@@ -349,15 +372,14 @@ function matchesQuery(sample: WorkSample, query: string) {
 function compareSamples(
   first: WorkSample,
   second: WorkSample,
-  sortField: SortField,
-  sortDirection: SortDirection,
+  sortOption: SortOption,
 ) {
-  const direction = sortDirection === "asc" ? 1 : -1;
-
-  if (sortField === "title") {
+  if (sortOption === "title-asc" || sortOption === "title-desc") {
+    const direction = sortOption === "title-asc" ? 1 : -1;
     return direction * first.title.localeCompare(second.title);
   }
 
+  const direction = sortOption === "oldest" ? 1 : -1;
   return direction * (dateValue(first.publishDate) - dateValue(second.publishDate));
 }
 

@@ -29,11 +29,15 @@ export default async function ContactPage() {
           Contact
         </p>
         <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
-          A dedicated path for inquiries, collaboration, or conversation.
+          Let&apos;s talk about your next project or opportunity.
         </h1>
         <p className="mt-5 text-lg leading-8 text-muted">
           {contactCta ??
-            "Use the available contact details for inquiries, collaboration, or conversation."}
+            "I welcome inquiries about new work, creative collaborations, and other opportunities."}
+        </p>
+        <p className="mt-3 text-lg leading-8 text-muted">
+          The contact form is the best way to reach me. Include a little context
+          about what you have in mind and your timeline.
         </p>
       </div>
 

@@ -49,6 +49,24 @@ main:focus {
   outline: none;
 }
 
+body:has(.work-detail-shell) {
+  overflow: hidden;
+}
+
+body:has(.work-detail-shell) > div {
+  height: 100dvh;
+  min-height: 0;
+}
+
+body:has(.work-detail-shell) main {
+  min-height: 0;
+  overflow: hidden;
+}
+
+body:has(.work-detail-shell) footer {
+  display: none;
+}
+
 ::selection {
   background: var(--accent);
   color: var(--accent-contrast);
