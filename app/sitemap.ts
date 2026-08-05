@@ -29,6 +29,11 @@ const staticRoutes: MetadataRoute.Sitemap = [
     priority: 0.6,
   },
   {
+    url: absoluteUrl("/poems"),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  },
+  {
     url: absoluteUrl("/resume"),
     changeFrequency: "monthly",
     priority: 0.7,
