@@ -12,7 +12,7 @@ export default async function Home() {
     <div>
       <section className="relative isolate overflow-hidden border-b border-foreground/10 bg-foreground">
         <Image
-          src="/filoli.jpg"
+          src="/coverphoto.png"
           alt=""
           fill
           priority
@@ -38,7 +38,13 @@ export default async function Home() {
                 href="/work"
                 className="inline-flex h-12 items-center justify-center rounded-sm bg-foreground-light px-5 text-sm font-semibold text-foreground transition-transform hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
-                View portfolio
+                My portfolio
+              </Link>
+              <Link
+                href="/about"
+                className="inline-flex h-12 items-center justify-center rounded-sm border border-foreground-light/55 px-5 text-sm font-semibold text-foreground-light transition-colors hover:bg-foreground-light/12 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              >
+                About me
               </Link>
               <Link
                 href="/contact"
