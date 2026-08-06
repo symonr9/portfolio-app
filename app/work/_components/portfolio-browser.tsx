@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { ContentfulImage, MediaPlaceholder } from "@/app/_components/contentful-image";
-import { MarkdownInline } from "@/app/_components/markdown-renderer";
+import { MarkdownInline, MarkdownRenderer } from "@/app/_components/markdown-renderer";
 import type { RichTextNode, WorkSample } from "@/lib/contentful";
 import type { WorkSampleType } from "@/lib/contentful/types";
 import styles from "./portfolio-browser.module.css";
@@ -320,9 +320,7 @@ function PortfolioSampleList({
             <h2 className="mt-8 break-words text-2xl font-semibold">
               {sample.title}
             </h2>
-            <p className="mt-3 leading-7 text-muted">
-              <MarkdownInline>{sample.summary}</MarkdownInline>
-            </p>
+            <MarkdownRenderer className="mt-3 leading-7 text-muted break-words">{sample.summary}</MarkdownRenderer>
             <div className="mt-5 flex flex-wrap gap-2">
               {sample.organization ? (
                 <span className="rounded-sm border border-foreground/10 px-2 py-1 text-xs text-muted break-words">
@@ -339,7 +337,7 @@ function PortfolioSampleList({
               ))}
             </div>
             <span className="mt-6 inline-flex text-sm font-semibold text-accent-text group-hover:text-foreground group-focus-visible:text-foreground">
-              View detail
+              View more
             </span>
           </Link>
         ))}

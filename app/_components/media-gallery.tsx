@@ -7,6 +7,7 @@ import type {
   ContentfulImage as ContentfulImageData,
   ContentfulMediaAsset,
 } from "@/lib/contentful";
+import { MarkdownRenderer } from "./markdown-renderer";
 
 type MediaGalleryProps = {
   items: ContentfulMediaAsset[];

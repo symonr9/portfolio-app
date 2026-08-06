@@ -10,6 +10,7 @@ import { buildPageMetadata } from "@/lib/site";
 import { formatDate } from "@/lib/format-date";
 import { ContentfulImage } from "../../_components/contentful-image";
 import { RichTextRenderer } from "../../_components/rich-text-renderer";
+import { MarkdownRenderer } from "@/app/_components/markdown-renderer";
 
 type BlogDetailProps = {
   params: Promise<{ slug: string }>;
@@ -106,8 +107,8 @@ export default async function BlogDetailPage({ params }: BlogDetailProps) {
                 key={sample.slug}
               >
                 <span className="break-words font-semibold">{sample.title}</span>
-                <span className="mt-1 block text-sm leading-6 text-muted">
-                  {sample.summary}
+                <span className="mt-1 block text-sm leading-6 text-muted break-words">
+                  <MarkdownRenderer>{sample.summary}</MarkdownRenderer>
                 </span>
               </Link>
             ))}

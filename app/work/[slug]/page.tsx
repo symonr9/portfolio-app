@@ -67,11 +67,11 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
       ? sample.gallery
       : sample.featuredImage
         ? [
-            {
-              ...sample.featuredImage,
-              fileName: "",
-            },
-          ]
+          {
+            ...sample.featuredImage,
+            fileName: "",
+          },
+        ]
         : [];
   const displayedMediaUrls = sample.gallery.length
     ? sample.gallery.map((item) => item.url)
@@ -82,20 +82,20 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
         : [];
   const showPrimaryMediaInLinks = Boolean(
     primaryMediaUrl &&
-      !displayedMediaUrls.some((url) =>
-        urlsReferToSameResource(primaryMediaUrl, url),
-      ),
+    !displayedMediaUrls.some((url) =>
+      urlsReferToSameResource(primaryMediaUrl, url),
+    ),
   );
   const showExternalUrlInLinks = Boolean(
     sample.externalUrl &&
-      !displayedMediaUrls.some((url) =>
-        urlsReferToSameResource(sample.externalUrl, url),
-      ) &&
-      !urlsReferToSameResource(sample.externalUrl, primaryMediaUrl),
+    !displayedMediaUrls.some((url) =>
+      urlsReferToSameResource(sample.externalUrl, url),
+    ) &&
+    !urlsReferToSameResource(sample.externalUrl, primaryMediaUrl),
   );
   const hasDetails = Boolean(
     sample.afterText?.trim() ||
-      sample.body?.json?.content?.some(hasRichTextNodeContent),
+    sample.body?.json?.content?.some(hasRichTextNodeContent),
   );
   const hasLinksPanel = showPrimaryMediaInLinks || showExternalUrlInLinks;
   const panels: WorkDetailPanel[] = [
@@ -104,11 +104,7 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
       label: "Overview",
       content: (
         <div>
-          <h2 className="text-xl font-semibold">Overview</h2>
-          <MarkdownRenderer className="mt-3 space-y-3 text-sm">
-            {sample.beforeText ?? sample.summary}
-          </MarkdownRenderer>
-          <dl className="mt-5 grid gap-3 border-t border-foreground/10 pt-4 text-sm sm:grid-cols-2">
+          <dl className="grid gap-3 sm:grid-cols-2">
             {[
               ["Organization", sample.organization],
               ["Role", sample.role],
@@ -136,71 +132,74 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
               ))}
             </div>
           ) : null}
+          <MarkdownRenderer className="mt-4 space-y-3">
+            {sample.beforeText ?? sample.summary}
+          </MarkdownRenderer>
         </div>
       ),
     },
     ...(hasDetails
       ? [
-          {
-            id: "detail",
-            label: "Details",
-            content: (
-              <div>
-                <h2 className="text-xl font-semibold">Details</h2>
-                <RichTextRenderer
-                  className="mt-3 space-y-4 text-sm"
-                  content={sample.body}
-                  fallback={sample.afterText}
-                />
-              </div>
-            ),
-          },
-        ]
+        {
+          id: "detail",
+          label: "Details",
+          content: (
+            <div>
+              <h2 className="text-xl font-semibold">Details</h2>
+              <RichTextRenderer
+                className="mt-3 space-y-4 text-sm"
+                content={sample.body}
+                fallback={sample.afterText}
+              />
+            </div>
+          ),
+        },
+      ]
       : []),
     ...(hasLinksPanel
       ? [
-          {
-            id: "links",
-            label: "Links & media",
-            content: (
-              <div>
-                <h2 className="text-xl font-semibold">Links & media</h2>
-                <div className="mt-4 space-y-4">
-                  {showPrimaryMediaInLinks ? (
-                    <MediaEmbed
-                      embedUrl={sample.embedUrl}
-                      previewImage={sample.featuredImage}
-                      title={`${sample.title} media`}
-                      videoUrl={sample.videoUrl}
-                    />
-                  ) : null}
-                  {showExternalUrlInLinks && sample.externalUrl ? (
-                    <ExternalMediaCard
-                      previewImage={sample.featuredImage}
-                      sourceUrl={sample.externalUrl}
-                    />
-                  ) : null}
-                </div>
+        {
+          id: "links",
+          label: "Links & media",
+          content: (
+            <div>
+              <h2 className="text-xl font-semibold">Links & media</h2>
+              <div className="mt-4 space-y-4">
+                {showPrimaryMediaInLinks ? (
+                  <MediaEmbed
+                    embedUrl={sample.embedUrl}
+                    previewImage={sample.featuredImage}
+                    title={`${sample.title} media`}
+                    videoUrl={sample.videoUrl}
+                  />
+                ) : null}
+                {showExternalUrlInLinks && sample.externalUrl ? (
+                  <ExternalMediaCard
+                    previewImage={sample.featuredImage}
+                    sourceUrl={sample.externalUrl}
+                  />
+                ) : null}
               </div>
-            ),
-          },
-        ]
+            </div>
+          ),
+        },
+      ]
       : []),
     ...(sample.outcome
       ? [
-          {
-            id: "outcome",
-            label: "Outcome",
-            content: (
-              <div>
-                <h2 className="text-xl font-semibold">Outcome</h2>
-                <MarkdownRenderer className="mt-3 space-y-3 text-sm">
-                  {sample.outcome}
-                </MarkdownRenderer>
-              </div>
-            ),
-          },
-        ]
+        {
+          id: "outcome",
+          label: "Outcome",
+          content: (
+            <div>
+              <h2 className="text-xl font-semibold">Outcome</h2>
+              <MarkdownRenderer className="mt-3 space-y-3 text-sm">
+                {sample.outcome}
+              </MarkdownRenderer>
+            </div>
+          ),
+        },
+      ]
       : []),
   ];
 
@@ -210,65 +209,35 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
         <div className="min-w-0">
           <div className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
             <Link
-              className="inline-flex shrink-0 rounded-sm text-xs font-semibold text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+              className="inline-flex shrink-0 rounded-sm font-semibold text-accent-text hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               href="/work"
             >
-              ← Portfolio
+              ← Back
             </Link>
-            <p className="break-words font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted">
-              {formatType(sample.type)} · {formatDate(sample.publishDate)}
-            </p>
           </div>
-          <h1 className="mt-1 break-words text-xl font-semibold leading-tight sm:text-2xl">
+          <p className="mt-4 break-words font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted">
+            {formatType(sample.type)} · {formatDate(sample.publishDate)}
+          </p>
+          <h1 className="mt-2 mb-2 break-words text-3xl font-semibold leading-tight">
             {sample.title}
           </h1>
-          <p className="mt-1 break-words text-sm leading-5 text-muted">
-            <MarkdownInline>{sample.summary}</MarkdownInline>
-          </p>
         </div>
-
-        <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
-          <dl className="hidden gap-x-4 text-xs xl:flex">
-            {[
-              ["Organization", sample.organization],
-              ["Role", sample.role],
-            ]
-              .filter(([, value]) => Boolean(value))
-              .map(([label, value]) => (
-                <div className="min-w-0" key={label}>
-                  <dt className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-muted">
-                    {label}
-                  </dt>
-                  <dd className="max-w-44 break-words font-semibold leading-5">
-                    {value}
-                  </dd>
-                </div>
-              ))}
-          </dl>
-          {primaryMediaUrl ? (
-            <a
-              className="inline-flex min-h-9 items-center rounded-sm border border-foreground/15 px-3 text-xs font-semibold transition-colors hover:bg-foreground hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              href={primaryMediaUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Open media
-            </a>
-          ) : null}
-          {sample.externalUrl ? (
-            <a
-              className="inline-flex min-h-9 items-center rounded-sm bg-foreground px-3 text-xs font-semibold text-background transition-colors hover:bg-accent hover:text-accent-contrast focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-              href={sample.externalUrl}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Visit project
-            </a>
-          ) : null}
-        </div>
+        {primaryMediaUrl ? (
+          <a
+            className="inline-flex min-h-9 items-center rounded-sm border border-foreground/15 px-3 text-xs font-semibold transition-colors hover:bg-foreground hover:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            href={primaryMediaUrl}
+            rel="noreferrer"
+            target="_blank"
+          >
+            Open media
+          </a>
+        ) : null}
       </header>
 
       <div className={styles.workspace}>
+        <div className="min-h-0">
+          <WorkDetailTabs panels={panels} />
+        </div>
         <div className="min-h-0">
           {sample.gallery.length ? (
             <MediaGallery items={sample.gallery} />
@@ -300,10 +269,6 @@ export default async function WorkDetailPage({ params }: WorkDetailProps) {
               </div>
             </div>
           )}
-        </div>
-
-        <div className="min-h-0">
-          <WorkDetailTabs panels={panels} />
         </div>
       </div>
     </article>

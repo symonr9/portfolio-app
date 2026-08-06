@@ -19,7 +19,7 @@
 .workspace {
   display: grid;
   gap: clamp(0.65rem, 1.4vw, 1rem);
-  grid-template-columns: minmax(0, 3fr) minmax(18rem, 2fr);
+  grid-template-columns: minmax(0, 3fr) minmax(18rem, 3fr);
   min-height: 0;
 }
 

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getContentfulDraftOptions, getHomePageData } from "@/lib/contentful";
 import { summarizeText } from "@/lib/summarize-text";
 import { ContentfulImage, MediaPlaceholder } from "./_components/contentful-image";
+import { MarkdownRenderer } from "./_components/markdown-renderer";
 
 export default async function Home() {
   const contentfulOptions = await getContentfulDraftOptions();
@@ -104,9 +105,11 @@ export default async function Home() {
                 ) : (
                   <MediaPlaceholder className="mb-5 aspect-[16/9] rounded-sm" />
                 )}
-                <p className="leading-7 text-muted">{sample.summary}</p>
+                <p className="mt-3 w-full text-muted break-words">
+                  <MarkdownRenderer>{sample.summary}</MarkdownRenderer>
+                </p>
                 <span className="mt-4 inline-flex text-sm font-semibold text-accent-text group-hover:text-foreground group-focus-visible:text-foreground">
-                  View detail
+                  View more
                 </span>
               </Link>
             ))}
