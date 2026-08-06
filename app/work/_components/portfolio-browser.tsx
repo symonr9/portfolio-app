@@ -175,7 +175,7 @@ export function PortfolioBrowser({ samples }: PortfolioBrowserProps) {
               className="min-h-11 rounded-sm border border-foreground/15 bg-background px-3 text-base font-normal text-foreground outline-none transition-colors placeholder:text-muted focus:border-accent sm:text-sm"
               id="portfolio-search"
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Filter by name, summary, body, or organization"
+              placeholder="Type here..."
               type="search"
               value={query}
             />

@@ -1,9 +1,9 @@
 .backgroundWrap {
-  height: clamp(6.5rem, 16vw, 10rem);
+  height: clamp(4.5rem, 16vw, 10rem);
   pointer-events: none;
   position: absolute;
   right: clamp(0rem, 3vw, 2rem);
-  top: clamp(-13rem, -18vw, -9rem);
+  top: clamp(-40rem, -18vw, -9rem);
   width: clamp(12rem, 28vw, 22rem);
   z-index: 0;
 }
@@ -41,6 +41,7 @@
     height: clamp(5rem, 24vw, 7rem);
     right: 0;
     top: clamp(-8rem, -28vw, -5.5rem);
+    display: none;
     width: min(58vw, 14rem);
   }
 }
