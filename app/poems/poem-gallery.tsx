@@ -93,7 +93,7 @@ export function PoemGallery({ poems }: { poems: Poem[] }) {
                     priority={index === 0}
                     sizes="(max-width: 767px) calc(100vw - 2.5rem), (max-width: 1199px) calc(100vw - 20rem), 840px"
                     src={`/poems/${poem.filename}`}
-                    width={1582}
+                    width={2048}
                   />
                 </figure>
 

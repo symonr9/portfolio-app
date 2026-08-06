@@ -59,15 +59,14 @@ export function SiteShell({
       <footer className="border-t border-foreground/10">
         <div className="mx-auto grid w-full max-w-6xl gap-6 px-5 py-8 text-sm text-muted sm:grid-cols-[1fr_auto] sm:items-center lg:px-8">
           <p>
-            Built as a reusable portfolio foundation for editable profile,
-            work, writing, and experience content.
+            Karissa Ramos | Thank you for visiting my website. Have a nice day! :)
           </p>
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <Link className="rounded-sm hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" href="/contact">
               Connect
             </Link>
             <Link className="rounded-sm hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent" href="/work">
-              Explore portfolio
+              Portfolio
             </Link>
           </div>
         </div>
