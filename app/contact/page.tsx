@@ -24,24 +24,17 @@ export default async function ContactPage() {
 
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
-      <div className="max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
-          Contact
-        </p>
+      <div className="w-full">
         <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
-          Let&apos;s talk about your next project or opportunity.
+          Contact Me
         </h1>
-        <p className="mt-5 text-lg leading-8 text-muted">
-          {contactCta ??
-            "I welcome inquiries about new work, creative collaborations, and other opportunities."}
-        </p>
-        <p className="mt-3 text-lg leading-8 text-muted">
-          The contact form is the best way to reach me. Include a little context
-          about what you have in mind and your timeline.
+        <p className="mt-3 w-full text-lg leading-8 text-muted">
+          I would love to hear about any projects or opportunities that I can be a part of. Please fill out the
+          details below with as much information as possible, and I will get back to you in a timely manner.
         </p>
       </div>
 
-      <div className="mt-10 grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-start">
+      <div className="mt-4 w-full">
         <div className="grid min-w-0 gap-4">
           {linkedIn || profile.resumePdf ? (
             <section
@@ -79,18 +72,6 @@ export default async function ContactPage() {
           ) : null}
 
           <ContactForm turnstileSiteKey={turnstileSiteKey} />
-        </div>
-
-        <div className="grid min-w-0 gap-4">
-          {contactItems.map(([item, value]) => (
-            <article
-              className="rounded-sm border border-foreground/10 bg-surface p-6"
-              key={item}
-            >
-              <h2 className="break-words text-xl font-semibold">{item}</h2>
-              <ContactValue value={value} />
-            </article>
-          ))}
         </div>
       </div>
     </section>

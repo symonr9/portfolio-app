@@ -16,13 +16,14 @@ export default async function WorkPage() {
 
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-16 lg:px-8">
-      <div className="max-w-3xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent-text">
-          Portfolio
-        </p>
+      <div className="w-full">
         <h1 className="mt-4 break-words text-4xl font-semibold sm:text-5xl">
-          Take a look at my stuff!
+          Portfolio
         </h1>
+        <p className="mt-5 w-full text-lg leading-8 text-muted">
+          This is a space where I get to share all my passions. 
+          Feel free to explore the different categories to learn more about who I am.
+        </p>
       </div>
 
       <PortfolioBrowser samples={workSamples} />
